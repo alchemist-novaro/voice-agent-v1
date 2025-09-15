@@ -1,0 +1,48 @@
+note: Collect contact information
+actions:
+  - type: callback
+    args: []
+    return: business_information
+    name: get_business_information
+  - type: process
+    ref_summary: false
+    ref_history: false
+    args: []
+    return: contact_infomation_str
+    prompt: |
+      Ask contact information to client to confirm if new appointment is need or can use old one.
+      Base Text:
+      """
+      Welcome to Uno assistant. Before start, I'd like confirm your contact information so that can ensure new appointment is needed or not.
+      Could you share your info please?
+      """
+
+      Update text more friendly and naturally.
+      And use this business information.
+      {business_information}
+
+      ** Output only updated text. no need explanations or code.
+  - type: analyze
+    ref_summary: false
+    ref_history: true
+    args: 
+      - contact_infomation_str
+    return: contact_information
+    prompt: |
+      Analyze contact information of client.
+      Output schema:
+      {
+        "email_address": string or null,
+        "phone_number": string or null,
+        "full_name": string or null,
+        "topic_id": int
+      }
+      The answer can be not related with topic. In this case, find topic from topic list - {}, and please let me know the topic_id.
+      * Output only json string as text format. I don't need any explanations or code formatting.
+  - type: callback
+    name: check_contact_information
+    args:
+      - contact_information
+    return: new_appointment_decision
+  - type: go_next
+    arg: new_appointment_decision

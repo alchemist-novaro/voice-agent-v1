@@ -1,0 +1,50 @@
+nodes:
+  - id: 0
+    path: ./workflows/nodes/area/0_area_confirm.yaml
+  - id: 1
+    path: ./workflows/nodes/area/1_area_not_match.yaml
+  - id: 2
+    path: ./workflows/nodes/area/2_area_re.yaml
+  - id: 3
+    path: ./workflows/nodes/building/3_building_confirm.yaml
+  - id: 4
+    path: ./workflows/nodes/building/4_building_not_match.yaml
+  - id: 5
+    path: ./workflows/nodes/building/5_building_re.yaml
+  - id: 6
+    path: ./workflows/nodes/extra/6_cancel_confirm.yaml
+  - id: 7
+    path: ./workflows/nodes/extra/7_cancel_re.yaml
+  - id: 8
+    path: ./workflows/nodes/extra/8_check.yaml
+  - id: 9
+    path: ./workflows/nodes/extra/9_final.yaml
+  - id: 10
+    path: ./workflows/nodes/request/10_request_analyze.yaml
+  - id: 11
+    path: ./workflows/nodes/service/11_service_confirm.yaml
+  - id: 12
+    path: ./workflows/nodes/service/12_service_not_match.yaml
+  - id: 13
+    path: ./workflows/nodes/service/13_service_re.yaml
+  - id: 14
+    path: ./workflows/nodes/time/14_time_schedule_confirm.yaml
+  - id: 15
+    path: ./workflows/nodes/time/15_time_schedule_re.yaml
+  - id: 16
+    path: ./workflows/nodes/time/16_time_schedule.yaml
+  - id: 17
+    path: ./workflows/nodes/time/17_time_urgent_schedule_confirm.yaml
+  - id: 18
+    path: ./workflows/nodes/time/18_time_urgent_schedule_re.yaml
+  - id: 19
+    path: ./workflows/nodes/time/19_time_urgent_schedule.yaml
+  - id: 20
+    path: ./workflows/nodes/time/20_time_schedule_not_match.yaml
+
+init_node: 10
+global_history_num: 5
+topic_history_num: 3
+summary_num: 4
+init_config:
+  customer_id: 10

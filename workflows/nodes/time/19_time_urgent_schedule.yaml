@@ -1,0 +1,24 @@
+note: Confirm urgent service time
+actions:
+  - type: callback
+    name: get_emergency_service_fee
+    args: []
+    return: emergency_service_fee
+  - type: process
+    ref_summary: false
+    ref_histroy: true
+    args: []
+    return: urgent_time_answer
+    prompt: |
+      Base Text:
+      """
+      I understand. We offer emergency services for an additional {emergency_service_fee}. Would you like me to check for immediate availability?
+      """
+
+      Task:
+      Update the text more natively with chat hostory and user friendly.
+
+      Requirements:
+      - Keep the emergency service additional fee confirmation
+      - Text should be natural, considering past communication
+      - Output only the updated text (no explanations).

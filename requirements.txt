@@ -1,0 +1,38 @@
+# Python AgentForce Framework Dependencies
+# Core dependencies for the AI agent framework
+
+# Type checking and validation
+typing-extensions>=4.0.0
+
+# JSON schema validation (if needed)
+jsonschema>=4.0.0
+
+# Optional: For better error handling and logging
+pydantic>=2.0.0
+
+# Optional: For async support (if needed in future)
+asyncio
+
+# Optional: For database integration (if needed)
+# sqlalchemy>=2.0.0
+# redis>=4.0.0
+
+# AI provider integration
+openai>=1.0.0
+
+# Web UI
+gradio>=4.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Optional: For other AI providers
+# anthropic>=0.3.0
+
+livekit~=1.0
+livekit-api~=1.0
+livekit-agents[deepgram,openai,cartesia,silero,turn-detector]~=1.0
+livekit-plugins-noise-cancellation
+aiohttp
+fastapi
+uvicorn

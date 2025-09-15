@@ -1,0 +1,69 @@
+note: Confirm scheduled time
+actions:
+  - type: process
+    ref_summary: false
+    ref_history: true
+    args: 
+      - time_answer_analytics
+    return: confirm_answer
+    prompt: |
+      Base Text:
+      """Then, we will schedule service time as Tuesday, 10 AM. Would you confirm this time to receive service?
+      
+      And the scheduled time is as following:
+      {time_answer_analytics}
+
+      Task:
+      - Ask confirm for service time schedule
+      
+      Requirements:
+      - Ask to client very friendly and shortly with easy and well-known works
+      - Mention scheduled time from chathistory. (Should change base text's time to exact scheduled time)"""
+  - type: analyze
+    ref_summary: false
+    ref_history: true
+    args: 
+      - confirm_answer
+      - node_topics
+    return: scheduled_time
+    prompt: |
+      Schedule confirm answer: {confirm_answer}
+
+      Task:
+      Analyze the scheduled time according to these rules:
+      - What is exact scheduled time? scheduled_time: string (e.g. Tuesday, 8 AM)
+      - Does he don't want this time? schedule_failed: boolean
+      - Did he answered not related one? If not related, what topic is it related to? Choose from {node_topics} and return its ID. topic_node: int
+      
+      Output format (plain text only, no code formatting, no explanations):
+      {
+        "scheduled_time": string,
+        "schedule_failed": boolean,
+        "topic_node": int
+      }
+  - type: callback
+    name: save_scheduled_time
+    args:
+      - scheduled_time
+    return:
+  - type: go_next
+    arg: scheduled_time
+    go_to:
+      topic_node:
+        # 0:
+        #   id: 0
+        # 3:
+        #   id: 3
+        # 6: 
+        #   id: 6
+        # 11:
+        #   id: 11
+        100:
+          id: 15
+      schedule_failed:
+        true:
+          id: 14
+        false:
+          id: 8
+    default:
+      id: 8

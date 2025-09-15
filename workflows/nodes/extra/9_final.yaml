@@ -1,0 +1,33 @@
+note: Finalize conversation
+actions:
+  - type: process
+    ref_summary: false
+    ref_history: true
+    args: []
+    return: finalize_answer
+    prompt: |
+      This is for finalize assistance.
+      Please ask rating about your service (0-10).
+      Mention rating range, and ask rating very friendly.
+  - type: analyze
+    ref_summary: false
+    ref_history: true
+    args: 
+      - finalize_answer
+    return: finalize_analysis
+    prompt: |
+      Output schema: json only (no text, no explanations)
+      {
+        rating: int (0-10)
+      }
+      Analyze rating from client's response: {finalize_answer}
+  - type: callback
+    name: save_rating
+    args: 
+      - finalize_analysis
+    return:
+  - type: go_next
+    arg:
+    go_to:
+    default:
+      id: -1

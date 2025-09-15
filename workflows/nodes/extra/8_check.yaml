@@ -1,0 +1,26 @@
+note: Check all the scheduling status
+actions:
+  - type: callback
+    args: []
+    return: response_analytics
+    name: 'check_status'
+  - type: go_next
+    arg: response_analytics
+    go_to:
+      full_fit:
+        true:
+          id: 9
+      # service_type_failed:
+      #   true:
+      #     id: 11
+      # service_area_failed:
+      #   true:
+      #     id: 0
+      # service_building_failed:
+      #   true:
+      #     id: 3
+      service_time_failed:
+        true:
+          id: 16
+    default:
+      id: 14

@@ -1,0 +1,82 @@
+# Redirect HTTP to HTTPS for all domains
+server {
+    listen 80;
+    listen [::]:80;
+    server_name voice-agent-v1.portfolio-app.online www.voice-agent-v1.portfolio-app.online \
+                voice-agent-v2.portfolio-app.online www.voice-agent-v2.portfolio-app.online;
+    return 301 https://$host$request_uri;
+}
+
+# Voice Agent v1 HTTPS
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name voice-agent-v1.portfolio-app.online www.voice-agent-v1.portfolio-app.online;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /api {
+        proxy_pass http://localhost:8001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    ssl_certificate /etc/letsencrypt/live/voice-agent-v1.portfolio-app.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/voice-agent-v1.portfolio-app.online/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+# Voice Agent v2 HTTPS
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name voice-agent-v2.portfolio-app.online www.voice-agent-v2.portfolio-app.online;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    location / {
+        proxy_pass http://localhost:8002;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /api {
+        proxy_pass http://localhost:8003;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    ssl_certificate /etc/letsencrypt/live/voice-agent-v2.portfolio-app.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/voice-agent-v2.portfolio-app.online/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}

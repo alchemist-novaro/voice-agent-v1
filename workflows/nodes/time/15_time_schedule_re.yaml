@@ -1,0 +1,52 @@
+note: Reback to time scheduling action
+actions:
+  - type: process
+    ref_summary: false
+    ref_history: true
+    args: []
+    return: reback_answer
+    prompt: |
+      - Generate answer about client request (even it's joking) shortly.
+      - Guide client to time scheduling naturally.
+      - Never mention about service scheduled time in the text, but guide client to that topic.
+      - Return to original topic again (service time scheduling).
+      - Ask to client "Do you want to go back to time scheduling?". Ofc, update this text more friendly.
+  - type: analyze
+    ref_summary: false
+    ref_history: true
+    args: 
+      - reback_answer
+      - node_topics
+    return: time_schedule_re_answer
+    prompt: |
+      Analyze the client's answer - {reback_answer}
+      Output format: json - No text, no explanations
+      Schema:
+      {
+        "reback": boolean,
+        "topic_id": int
+      }
+      Questions:
+      - Does he want to go back to service time scheduling? reback: boolean
+      - If not, what topic did he say? Select topic from {node_topics}, and let me know only topic id. topic_id: int
+  - type: go_next
+    arg: time_schedule_re_answer
+    go_to:
+      reback:
+        true:
+          id: 16
+      topic_id:
+        16:
+          id: 15
+        # 0: 
+        #   id: 0
+        # 3: 
+        #   id: 3
+        # 6: 
+        #   id: 6
+        # 11: 
+        #   id: 11
+        100:
+          id: 15
+    default: 
+      id: 16

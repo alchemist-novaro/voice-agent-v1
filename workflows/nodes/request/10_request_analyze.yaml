@@ -1,0 +1,85 @@
+note: Analyze user request
+actions:
+  - type: callback
+    name: get_user_request
+    args: []
+    return: user_request
+  - type: callback
+    name: get_service_type
+    args: []
+    return: service_type
+  - type: callback
+    name: get_service_area
+    args: []
+    return: service_area
+  - type: callback
+    name: get_service_building
+    args: []
+    return: service_building
+  - type: analyze
+    ref_summary: false
+    ref_history: false
+    args:
+      - user_request
+      - service_type
+      - service_area
+      - service_building
+    return: response_analytics
+    prompt: |
+      User request: {user_request}
+
+      Business service features:
+      - Service Type: {service_type}
+      - Service Area: {service_area}
+      - Service Building Type: {service_building}
+
+      Task:
+      1. Extract from the user request:
+        - service_type (what type of service the client wants)
+        - service_area (where the client wants the service)
+        - service_building (the type of building the client mentions)
+
+      2. Compare the extracted values with the business service features.
+
+      3. Return a JSON response with:
+      - "full_fit": true if all features match, otherwise false
+      - "service_type": string (from client request)
+      - "service_area": string (from client request)
+      - "service_building": string (from client request)
+      - "service_type_failed": true if client's service type does not match business, else false
+      - "service_area_failed": true if client's service area does not match business, else false
+      - "service_building_failed": true if client's building type does not match business, else false
+
+      Response format (plain text only, no explanations, no extra formatting):
+
+      {
+        "full_fit": boolean,
+        "service_type": string,
+        "service_area": string,
+        "service_building": string,
+        "service_type_failed": boolean,
+        "service_area_failed": boolean,
+        "service_building_failed": boolean
+      }
+  - type: callback
+    args:
+      - response_analytics
+    name: save_request_data
+    return:
+  - type: go_next
+    arg: response_analytics
+    go_to:
+      full_fit:
+        true:
+          id: 16
+      # service_type_failed:
+      #   true:
+      #     id: 11
+      # service_area_failed:
+      #   true:
+      #     id: 0
+      # service_building_failed:
+      #   true:
+      #     id: 3
+    default:
+      id: 16

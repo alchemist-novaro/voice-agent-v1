@@ -1,0 +1,96 @@
+note: Schedule service time
+actions:
+  - type: callback
+    name: get_service_times
+    args: []
+    return: service_times
+  - type: callback
+    name: get_node_topics
+    args: []
+    return: node_topics
+  - type: process
+    ref_summary: false
+    ref_history: true
+    args:
+      - service_times
+    return: time_answer
+    prompt: |
+      Base Text:
+      """We have multiple times available.
+      Alternatively, you can click below to schedule your appointment:
+      [https://webscheduler]
+
+      Here are the earliest available slots:
+      - Tuesday 11 AM
+      - Thursday 2 PM
+      - Friday 4 PM
+
+      Need a different time? Let me know your availability."""
+
+      Task:
+      Update the text with the latest available times:
+      {service_times}
+
+      Requirements:
+      - Keep the scheduling link visible.
+      - Replace the old time list with the new one.
+      - Make the wording friendly and natural, considering past conversation context.
+      - Output only the updated text (no explanations, no plain text format).
+
+      Please output only updated text without any plain text or explanations
+  - type: analyze
+    ref_summary: false
+    ref_history: true
+    args:
+      - time_answer
+      - service_times
+      - node_topics
+    return: time_answer_analytics
+    prompt: |
+      Client Answer:
+      {time_answer}
+
+      Task:
+      Analyze the client's answer according to these rules:
+
+      - When the client sheduled service time? (scheduled_time: string, e.g. Tuesday, 10 AM)
+      - Did the client scheduled service available time - {service_times}? (time_matched: bool)
+      - Is the client requesting urgent service? (urgent: bool)
+      - Does the client want to cancel and not receive the service? (canceled: bool)
+      - If unrelated, what topic is it related to? Choose from {node_topics} and return its ID. (topic_node: int)
+
+      Output format (plain text only, no code formatting, no explanations):
+      {
+        "scheduled_time": string,
+        "time_matched": true/false,
+        "urgent": true/false,
+        "canceled": true/false,
+        "topic_node": int
+      }
+  - type: go_next
+    arg: time_answer_analytics
+    go_to:
+      topic_node:
+        # 0:
+        #   id: 0
+        # 3:
+        #   id: 3
+        # 6: 
+        #   id: 6
+        # 11: 
+        #   id: 11
+        100:
+          id: 15
+      # canceled:
+      #   true:
+      #     id: 6
+      # urgent:
+      #   true:
+      #     id: 19
+      time_matched:
+        true:
+          id: 14
+        # false:
+        #   id: 20
+    default:
+      id: 14
