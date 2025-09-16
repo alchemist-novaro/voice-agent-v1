@@ -1,0 +1,203 @@
+note: "Greeting & Initial Customer Identificatoin"
+nodes:
+  init:
+    type: analyze
+    client:
+      prompt: |
+        With chat history and client's message ( $message ), determine conversatoin step.
+
+        Output current conversation step as following json schema:
+        ```json
+        {
+          "step": int
+        }
+        ```
+
+        here:
+        0: Greeting (ONLY if this is your FIRST message in the conversation)
+        1: Confirm Contact Customer Information
+        2: Confirm Service Addresses
+
+        Important:
+        If customer send first help message (e.g. Hi, my AC stopped working.), determien step as 1 (Confirm contact customer information).
+
+        Output only json code. Any plaintext or explanations are not allowed.
+      return: customer_information_anlysis
+    go_to:
+      data: customer_information_anlysis
+      cases:
+        - name: step
+          value: 0
+          to: greeting
+          step: greeting
+        - name: step
+          value: 1
+          to: greeting
+          step: fetch_contact_information
+        - name: step
+          value: 2
+          to: greeting
+          step: fetch_service_addresses
+      default:
+        to: greeting
+        step: no_topic
+  greeting:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Welcome to Acme! I'm Uno, your digital assistant. Before 
+        """ + [Continue naturally based on customer's request and conversation context]
+
+        Update this welcome message.
+        Output: ONLY the updated assistant message (no explanations, no extra text, no code format).
+    go_to:
+      data:
+      cases: []
+      default:
+        to: finish
+        step: -1
+  fetch_contact_information:
+    type: callback
+    client:
+      name: get_contact_information
+      args: []
+      return: contact_information
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: confirm_contact_information
+  fetch_service_addresses:
+    type: callback
+    client:
+      name: get_addresses
+      args: []
+      return: Addresses
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: confirm_service_addresses
+  confirm_contact_information:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Thanks for reaching out me.
+        I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
+        """
+
+        Current Contact Information: $contact_information
+
+        Task:
+        You should generate confirmation message. make more natively and friendly.
+
+        Output: ONLY the updated assistant message (no explanations, no extra text, no code format).
+    go_to:
+      data:
+      cases: []
+      default:
+        to: finish
+        step: -1
+
+  # send_contact_confirmation:
+  #   type: process
+  #   client:
+  #     prompt: |
+  #       Base text:
+  #       """
+  #       I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
+  #       """
+
+  #       Current Customer Information: $customer_information
+
+  #       Task:
+  #       You should generate confirmation message.
+
+  #       Output: ONLY the updated assistant message (no explanations, no extra text).
+  #   go_to:
+  #     data: 
+  #     cases: []
+  #     default:
+  #       to: finish
+  #       step: -1
+  # confirm_contact:
+  #   type: analyze
+  #   client:
+  #     prompt: |
+  #       Analyze customer confirmation message: $message
+  #       Output schema:
+  #       ```json
+  #       {
+  #         "confirmed": bool
+  #       }
+  #       ```
+  #       Output only json code. Any plaintext or explanations are not allowed.
+  #     return: contact_customer_information_confirmed
+  #   go_to:
+  #     data: contact_customer_information_confirmed
+  #     cases:
+  #       - name: confirmed
+  #         value: true
+  #         to: greeting
+
+  # - type: analyze
+  #   client:
+  #     prompt: |
+  #       Current customer information: $customer_information
+  #       Update this information baseed on chat history and customer message: $message
+  #       The required fields for contact custoemr information are:
+  #       full_name: required
+  #       phone_number: required
+  #       email_address: optional. if exist, it will be good but can passable
+
+  #       Output schema:
+  #       ```json
+  #       {
+  #         "full_name": string,
+  #         "phone_number": string,
+  #         "email_address": string | null
+  #       }
+  #       ```
+
+  #       Output ONLY json code. Any plaintext or explanations are not allowed.
+  #     return: update_contact_customer_information_data
+  #   go_to:
+  #     data:
+  #     cases: []
+  #     default:
+  #       to: greeting
+  #       step: 4
+  # - type: callback
+  #   client:
+  #     name: update_contact_customer_information
+  #     args:
+  #       - update_contact_customer_information_data
+  #     return: update_contact_customer_information_result
+
+  
+  # no_topic:
+  #   type: process
+  #   client:
+  #     prompt: |
+  #       The customer's message is unrelated to the current conversation intent.
+
+  #       Customer message: $message
+
+  #       Your goals:
+  #       1. Respond naturally to the customer's request/question very shortly.
+  #       2. Politely point out that their message is off-topic.
+  #       3. Guide the customer back to the current conversation intent.
+
+  #       Output: ONLY the updated assistant message (no explanations, no extra text).
+  #   go_to:
+  #     data: 
+  #     cases: []
+  #     default:
+  #       to: finish
+  #       step: -1

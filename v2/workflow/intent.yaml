@@ -1,0 +1,94 @@
+note: "Classify Intents"
+nodes:
+  init:
+    type: analyze
+    client:
+      prompt: |
+        Analyze the chat history and classify intent of received message.
+        Current message: $message
+        Output intent data as json format with following schema:
+        ```json
+        {
+          "intent": string,    // intent of current message (greeting | service | property | dispatch | other)
+        }
+        ```
+  
+        The intent details are as following:
+        1. Greeting & Initial Customer Identification (intent: greeting)
+          Detail:
+          - First Message Greeting
+            ONLY if this is your FIRST message in the conversation:
+            "Welcome to Acme! I'm Uno, your digital assistant." + [Continue naturally based on customer's request and conversation context]
+          - Customer Information
+            Ensure you have the customer's first name AND last name (both required), phone number, email and then requested service address.
+        2. Service Information (intent: service)
+          Detail:
+            Understand the customer's requested service and ensure it is supported and qualified.
+            - Classify the customer's requested service
+            - Qualify the service
+            - Ask the customer about the disqualifications.
+            - Disqualify the service and inform the customer that you won't be able to provide the service
+        3. Property Information (intent: property)
+          Detail:
+            Understand if the customer is the property owner and deduce the property type from the conversation.
+            - Check conversation history for property ownership indicators
+        4. Availability & Dispatch Fee (intent: dispatch)
+          Detail:
+            Provide availability based on the customer's needs, along with the relevant dispatch fees.
+            - Query the availability
+            - Present the first available appointment to the customer
+            - Offer exactly ONE alternative appointment time to the customer.
+            - Inform the customer that you couldn't find an available date, propose to redirect the customer to an authorized person
+            - Set the selected availability
+        5. Other (intent: other)
+          Detail:
+            All the intents are not related above 4 intents.
+            It can be joking, humor, or any other topics.
+
+        Important:
+        If customer send first help message (e.g. Hi, my AC stopped working.), classify intent as greeting.
+  
+        Output only json code. Any plaintext or explanations are not allowed.
+      return: intent_data
+    go_to:
+      data: intent_data
+      cases:
+        - name: intent
+          value: greeting
+          to: greeting
+          step: init
+        - name: intent
+          value: service
+          to: service
+          step: init
+        - name: intent
+          value: property
+          to: property
+          step: init
+        - name: intent
+          value: dispatch
+          to: dispatch
+          step: init
+      default:
+        to: intent
+        step: no_topic
+  no_topic:
+    type: process
+    client:
+      prompt: |
+        The customer's message is unrelated to the current conversation intent.
+
+        Customer message: $message
+
+        Your goals:
+        1. Respond naturally to the customer's request/question very shortly.
+        2. Politely point out that their message is off-topic.
+        3. Guide the customer back to the current conversation intent.
+
+        Output: ONLY the updated assistant message (no explanations, no extra text).
+    go_to:
+      data: 
+      cases: []
+      default:
+        to: finish
+        step: -1
