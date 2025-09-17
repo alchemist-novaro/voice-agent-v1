@@ -99,12 +99,12 @@ def validate_service_address(customer_id: str, args: Any):
     }
 
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
-    "get_contact_information": get_contact_information,
-    "get_service_addresses": get_service_addresses,
-    "set_contact_information": set_contact_information,
-    "update_contact_information": update_contact_information,
-    "update_customer_status": update_customer_status,
-    "get_customer_status": get_customer_status,
-    "finish_greeting_agent": finish_greeting_agent,
-    "validate_service_address": validate_service_address
+    "get_contact_information":      get_contact_information,
+    "get_service_addresses":        get_service_addresses,
+    "set_contact_information":      set_contact_information,
+    "update_contact_information":   update_contact_information,
+    "update_customer_status":       update_customer_status,
+    "get_customer_status":          get_customer_status,
+    "finish_greeting_agent":        finish_greeting_agent,
+    "validate_service_address":     validate_service_address
 }

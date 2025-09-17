@@ -427,6 +427,9 @@ nodes:
         Sorry, but your service address is not supported. Could you provide another address please?
         """
 
+        Important
+        If customer answered address, but still you should ask address, it's because the custoerm mentioned address is not validated or not supported.
+
         This is to ask service receiving address.
         Please update above base text according to chat history more friendly, more natively and reasonably.
 
