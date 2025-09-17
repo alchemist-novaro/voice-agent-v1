@@ -1,5 +1,5 @@
-init_node: intent
-init_step: init
+init_node: greeting
+init_step: greeting
 chat_history_maxlen: 10
 global_system_prompt: |
   Who are you?

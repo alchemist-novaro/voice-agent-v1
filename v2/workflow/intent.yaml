@@ -47,6 +47,7 @@ nodes:
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), classify intent as greeting.
+        The service address topic is not service intent. It's in greeting intent.
 
         Example Intents:
 
@@ -71,6 +72,21 @@ nodes:
         User: Yes confirm
         Assistant: Thank you for confirming contact information. Next, could you please provide the address where you need the AC repair? This will help me make sure we send help to the right place.
         User: 428 Seawind Street, Lakeway, TX 78734
+
+        ### intent: greeting
+        User: yes, confirm
+        Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
+        User: no
+
+        ### intent: greeting
+        User: yes, confirm
+        Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
+        User: yes, correct
+
+        ### intent: greeting
+        User: yes, confirm
+        Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
+        User: No, my address is ...
 
         ### intent: service
         User: 428 Seawind Street, Lakeway, TX 78734

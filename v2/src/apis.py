@@ -32,7 +32,7 @@ def get_contact_information(customer_id: str, args: Any):
 
 def get_service_addresses(customer_id: str, args: Any):
     return {
-        "addresses": customer_info.get("addresses", [])
+        "addresses": [service["address"] for service in customer_info.get("addresses", [])]
     }
 
 def set_contact_information(customer_id: str, args: Any):
@@ -72,11 +72,39 @@ def update_customer_status(customer_id: str, args: Any):
 def get_customer_status(customer_id: str, args: Any):
     return customer_status
 
+def finish_greeting_agent(customer_id: str, args: Any):
+    customer_status["greeting_addresses"] = True
+    print("Greeting Agent finished")
+
+def validate_service_address(customer_id: str, args: Any):
+    address_data = args["update_service_address"]
+    if not address_data["service_address"]:
+        return {
+            "validated": False
+        }
+    current_addresses = [service["address"] for service in customer_info["addresses"]]
+    if address_data["service_address"] in current_addresses:
+        customer_info["addresses"].append(
+            {
+                "address": address_data["service_address"],
+                "is_authorized": True,
+                "property_type": "house",
+                "type": "residential",
+                "in_service_area": True,
+                "serviceable": True
+            }
+        )
+    return {
+        "validated": True
+    }
+
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information": get_contact_information,
     "get_service_addresses": get_service_addresses,
     "set_contact_information": set_contact_information,
     "update_contact_information": update_contact_information,
     "update_customer_status": update_customer_status,
-    "get_customer_status": get_customer_status
+    "get_customer_status": get_customer_status,
+    "finish_greeting_agent": finish_greeting_agent,
+    "validate_service_address": validate_service_address
 }

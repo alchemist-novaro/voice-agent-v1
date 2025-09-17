@@ -9,14 +9,13 @@ nodes:
         Output current conversation step as following json schema:
         ```json
         {
-          "intent": string // greeting | contact | addresses
+          "intent": string // contact | addresses
         }
         ```
 
         here:
-        greeting: Greeting (ONLY if this is your FIRST message in the conversation)
-        contact: Confirm Contact Customer Information
-        addresses: Confirm Service Addresses
+        contact: Confirm Contact Customer Information (in this case, current chat history is in contact information topic)
+        addresses: Confirm Service Addresses (in this case, current chat history is in service address topic)
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), determien intent as "contact".
@@ -57,8 +56,8 @@ nodes:
       cases: []
       default:
         finished: true
-        to: intent
-        step: init
+        to: greeting
+        step: fetch_contact_information
   fetch_contact_information:
     type: callback
     client:
@@ -339,6 +338,8 @@ nodes:
 
         Output ONLY updated text. (no explanations, no extra text, no node format)
     go_to:
+      data:
+      cases: []
       default:
         to: greeting
         step: fetch_contact_information
@@ -366,8 +367,8 @@ nodes:
         }
         ```
         Here
-        exist: Service addresses exist in this list
-        none: Service addresses not exist in this list
+        exist: The current addresses have got items
+        none: The current addresses don't have got items or none
 
         Output only json code. Anly plaintext or explanations are not allowed.
       return: intent_data
@@ -421,6 +422,10 @@ nodes:
         """
         Could you provide address where you need to receive service?
         """
+        or 
+        """
+        Sorry, but your service address is not supported. Could you provide another address please?
+        """
 
         This is to ask service receiving address.
         Please update above base text according to chat history more friendly, more natively and reasonably.
@@ -439,34 +444,114 @@ nodes:
       prompt: |
         Current service addresses: $service_addresses
         Customer message: $message
-        Analyze addresses and message, and output json data as following schema:
+        Analyze customer message and output following json schema data:
         ```json
         {
-          "intent": selected | new_address | not_given
+          "service_address": string,
+          "not_mentioned_address": boolean,
+          "canceled": boolean
         }
         ```
-        Here,
-        selected: Customer mentioned an service address and it is in service addresses.
-        new_address: Customer mentioned service address is not in service addresses, but Customer gave exact service address.
-        not_given: Customer didn't give any address and didn't selected any address from list.
 
-        Output only json code. Anly plaintext or explanations are not allowed.
-      return: intent_data
+        Here, analyze message and determine exact service receiving address reference current service addresses.
+        But it can be different address to current service addresses.
+        And not_mentioned_address:
+        It should be true if address is null or empty string
+        And about canceled:
+        If customer responded address is not supported, customer can cancel service, and in this case, canceled should be true
+
+        Output only json data code. Any explanations or plaintext are not allowed.
+      return: update_service_address
     go_to:
-      data: intent_data
-      cases:
-        - name: intent
-          value: selected
+      data: update_service_address
+      cases: 
+        - name: not_mentioned_address
+          value: true
           to: greeting
-          step: validate_service_addresses
-        - name: intent
-          value: new_address
-          to: greeting
-          step: update_service_addresses
-        - name: intent
-          value: not_given
-          to: greeting
-          step: update_service_addresses
+          step: ask_service_addresses
+        - name: canceled
+          value: true
+          to: canceled
+          step: -1
       default:
         to: greeting
         step: validate_service_addresses
+  validate_service_addresses:
+    type: callback
+    client:
+      name: validate_service_address
+      args:
+        - update_service_address
+      return: validate_result
+    go_to:
+      data: validate_result
+      cases: 
+        - name: validated
+          value: true
+          to: greeting
+          step: finish_service_address
+        - name: validated
+          value: false
+          to: greeting
+          step: ask_service_addresses
+      default:
+        to: greeting
+        step: finish_service_address
+  finish_service_address:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Thank you for providing address. We validated your address, and saved.
+        """
+        or
+        """
+        Thanks for sharing your address!
+        """
+
+        Update assistant message more friendly and natively according to chat history.
+
+        Output ONLY updated assistant message. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: finish_agent
+  finish_agent:
+    type: callback
+    client:
+      name: finish_greeting_agent
+      args: []
+      return:
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: go_to_other_agent
+  go_to_other_agent:
+    type: callback
+    client:
+      name: get_customer_status
+      args: []
+      return: customer_status
+    go_to:
+      data: customer_status
+      cases:
+        - name: service
+          value: false
+          to: service
+          step: init
+        - name: property
+          value: false
+          to: property
+          step: init
+        - name: dispatch
+          value: false
+          to: dispatch
+          step: init
+      default:
+        to: completed
+        step: -1
