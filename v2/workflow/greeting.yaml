@@ -385,40 +385,27 @@ nodes:
       default:
         to: greeting
         step: confirm_service_addresses
+  confirm_service_addresses:
+    type: process
+    client:
+      prompt: |
+
   analyze_service_response:
     type: analyze
     client:
       prompt: |
-        Current addresses: $service_addresses
-        Analyze addresses and output json data as following schema:
+        Current service addresses: $service_addresses
+        Customer message: $message
+        Analyze addresses and message, and output json data as following schema:
         ```json
         {
-          "intent": confirmed | update
+          "intent": selected | new_address | not_given
         }
         ```
-        Here
-        confirmed: Service addresses exist, and customer confirmed
-        update: Customer want update addresses
-
-        Example
-        ### intent: update
-        User: 6565656565
-        Assistant: I've got your updated phone number down. Thank you!
-        Assistant: Next, could you please provide the address where you need the AC repair? This will help me make sure we send help to the right place.
-        User: 428 Seawind Street, Lakeway, TX 78734
-
-        ### intent: confirmed
-        User: 6565656565
-        Assistant: I've got your updated phone number down. Thank you!
-        Assistant: Next, could you please provide the address where you need the AC repair? I see some addresses you have: [addresses]. Would you confirm that please?.
-        User: Yes, confirm.
-
-        ### intent: update
-        Assistant: Thank you for reaching out. I've got your info on file as [full_name], and your phone number ends in [last_4_digits_phone_number], with the email address [email_address]. Is everything looking correct?
-        User: Yes, sure
-        Assistant: I've got your updated phone number down. Thank you!
-        Assistant: Next, could you please provide the address where you need the AC repair? I see some addresses you have: [addresses]. Would you confirm that please?.
-        User: No, I want to receive service at 428 Seawind Street, Lakeway, TX 78734
+        Here,
+        selected: Customer mentioned an service address and it is in service addresses.
+        new_address: Customer mentioned service address is not in service addresses, but Customer gave exact service address.
+        not_given: Customer didn't give any address and didn't selected any address from list.
 
         Output only json code. Anly plaintext or explanations are not allowed.
       return: intent_data
@@ -426,11 +413,15 @@ nodes:
       data: intent_data
       cases:
         - name: intent
-          value: confirmed
+          value: selected
           to: greeting
           step: validate_service_addresses
         - name: intent
-          value: update
+          value: new_address
+          to: greeting
+          step: update_service_addresses
+        - name: intent
+          value: not_given
           to: greeting
           step: update_service_addresses
       default:
