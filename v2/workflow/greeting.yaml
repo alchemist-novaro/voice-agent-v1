@@ -4,43 +4,43 @@ nodes:
     type: analyze
     client:
       prompt: |
-        With chat history and client's message ( $message ), determine conversatoin step.
+        With chat history and client's message ( $message ), determine conversatoin intent.
 
         Output current conversation step as following json schema:
         ```json
         {
-          "step": int
+          "intent": string // greeting | contact | addresses
         }
         ```
 
         here:
-        0: Greeting (ONLY if this is your FIRST message in the conversation)
-        1: Confirm Contact Customer Information
-        2: Confirm Service Addresses
+        greeting: Greeting (ONLY if this is your FIRST message in the conversation)
+        contact: Confirm Contact Customer Information
+        addresses: Confirm Service Addresses
 
         Important:
-        If customer send first help message (e.g. Hi, my AC stopped working.), determien step as 1 (Confirm contact customer information).
+        If customer send first help message (e.g. Hi, my AC stopped working.), determien intent as "contact".
 
         Output only json code. Any plaintext or explanations are not allowed.
-      return: customer_information_anlysis
+      return: intent_data
     go_to:
-      data: customer_information_anlysis
+      data: intent_data
       cases:
-        - name: step
-          value: 0
+        - name: intent
+          value: greeting
           to: greeting
           step: greeting
-        - name: step
-          value: 1
+        - name: intent
+          value: contact
           to: greeting
           step: fetch_contact_information
-        - name: step
-          value: 2
+        - name: intent
+          value: addresses
           to: greeting
           step: fetch_service_addresses
       default:
         to: greeting
-        step: no_topic
+        step: init
   greeting:
     type: process
     client:
@@ -56,8 +56,9 @@ nodes:
       data:
       cases: []
       default:
-        to: finish
-        step: -1
+        finished: true
+        to: intent
+        step: init
   fetch_contact_information:
     type: callback
     client:
@@ -69,20 +70,81 @@ nodes:
       cases: []
       default:
         to: greeting
-        step: confirm_contact_information
-  fetch_service_addresses:
-    type: callback
+        step: analyze_contact_information
+  analyze_contact_information:
+    type: analyze
     client:
-      name: get_addresses
-      args: []
-      return: Addresses
+      prompt: |
+        Check the Current Customer Contact Information section for the existing customer information
+        Current Customer Contact Information: $contact_information
+        Customer's current message: $message
+
+        Requried fields:
+        - full_name: requried
+        - phone_number: required
+        - email_address: optional
+
+        Determine Conversation intent as following schema:
+        ```json
+        {
+          "intent": string // all | some | none | all_confirmed | update_contact
+        }
+        ``` 
+
+        Here:
+        - all: All contact informations exist. Need to confirm only
+        - some: Some contact informations exist, but some is missing
+        - none: All contact informations are not existing. Need to ask
+        - all_confirmed: All contact information exist, and customer already confirmed in this message
+        - update_contact: Customer answered about asking contact information in this message, and want to update it.
+
+        Example conversaions:
+        ### intent: all | some | none
+        User: Hi
+        Assistant: Welcome to Acme! I'm Uno, your digital assistant. What can I assist you?
+        User: My AC is broken
+
+        ### intent: all_confirmed
+        User: My AC is broken
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+                   If all is correct, could you confirm please?
+        User: Yes confirm
+
+        ### intent: update_contact
+        User: My AC is broken
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+                   If all is correct, could you confirm please?
+        User: I want to update. My phone number is ...
+
+        Output only json code. Any plaintext or explanations are not allowed.
+      return: intent_data
     go_to:
-      data:
-      cases: []
+      data: intent_data
+      cases:
+        - name: intent
+          value: all
+          to: greeting
+          step: ask_confirm_contact_information
+        - name: intent
+          value: some
+          to: greeting
+          step: ask_more_contact_information
+        - name: intent
+          value: none
+          to: greeting
+          step: ask_contact_information
+        - name: intent
+          value: all_confirmed
+          to: greeting
+          step: finish_contact_information
+        - name: intent
+          value: update_contact
+          to: greeting
+          step: analyze_update_contact_information
       default:
         to: greeting
-        step: confirm_service_addresses
-  confirm_contact_information:
+        step: analyze_contact_information
+  ask_confirm_contact_information:
     type: process
     client:
       prompt: |
@@ -102,102 +164,139 @@ nodes:
       data:
       cases: []
       default:
-        to: finish
-        step: -1
+        finished: true
+        to: intent
+        step: init
+  ask_more_contact_information:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        I see your contact information in this file: [full_name], but can't find phone number. The email address is optional but if you provide it, it will be more helpful.
+        """
+        or 
+        """
+        I've updated contact information but still some info is required like phone number. Could you share this info please?
+        """
 
-  # send_contact_confirmation:
-  #   type: process
-  #   client:
-  #     prompt: |
-  #       Base text:
-  #       """
-  #       I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
-  #       """
+        According to chat history, update text more friendly and natively.
+        Output: ONLY updated assistant message (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init
+  ask_contact_information:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Sorry, but I can't find your contact information. It's necessary to make a new appointment. Could you share your contact information please?
+        """
+        or 
+        """
+        I've received your message and tried to update contact information, but we couldn't find any required information. Could you provide your contact information again please?
+        """
+        or
+        """
+        What do you want to update contact information? Pleae feel free to provide.
+        """
 
-  #       Current Customer Information: $customer_information
+        According to chat history, update text more friendly and natively.
+        Output: ONLY updated assistant message (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init
+  analyze_update_contact_information:
+    type: analyze
+    client:
+      prompt: |
+        Analyze the customer message: $message
+        And determine updatable contact information as following json schema:
+        ```json
+        {
+          "full_name": string | null,
+          "phone_number": string | null,
+          "email_address": string | null,
+          "updatable": boolean // it should be true when full_name is not null or phone_number is not null. But if they are null, it should be false
+        }
+        ```
 
-  #       Task:
-  #       You should generate confirmation message.
+        Output only json code. Any plaintext or explanations are not allowed.
+      return: update_contact_information
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: update_contact_information
+  update_contact_information:
+    type: callback
+    client:
+      name: update_contact_information
+      args: 
+        - update_contact_information
+      return: update_contact_information_result
+    go_to:
+      data: update_contact_information_result
+      cases: 
+        - name: status
+          value: failed
+          to: greeting
+          step: ask_contact_information
+        - name: status
+          value: full
+          to: greeting
+          step: finish_contact_information
+        - name: status
+          value: some_missed
+          to: greeting
+          step: ask_more_contact_information
+        - name: status
+          value: all_missed
+          to: greeting
+          step: ask_contact_information
+      default:
+        to: greeting
+        step: finish_contact_information
+  finish_contact_information:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Thank you for confirming your contact information.
+        """
+        or
+        """
+        We've updated your contact information successfully.
+        """
 
-  #       Output: ONLY the updated assistant message (no explanations, no extra text).
-  #   go_to:
-  #     data: 
-  #     cases: []
-  #     default:
-  #       to: finish
-  #       step: -1
-  # confirm_contact:
-  #   type: analyze
-  #   client:
-  #     prompt: |
-  #       Analyze customer confirmation message: $message
-  #       Output schema:
-  #       ```json
-  #       {
-  #         "confirmed": bool
-  #       }
-  #       ```
-  #       Output only json code. Any plaintext or explanations are not allowed.
-  #     return: contact_customer_information_confirmed
-  #   go_to:
-  #     data: contact_customer_information_confirmed
-  #     cases:
-  #       - name: confirmed
-  #         value: true
-  #         to: greeting
-
-  # - type: analyze
-  #   client:
-  #     prompt: |
-  #       Current customer information: $customer_information
-  #       Update this information baseed on chat history and customer message: $message
-  #       The required fields for contact custoemr information are:
-  #       full_name: required
-  #       phone_number: required
-  #       email_address: optional. if exist, it will be good but can passable
-
-  #       Output schema:
-  #       ```json
-  #       {
-  #         "full_name": string,
-  #         "phone_number": string,
-  #         "email_address": string | null
-  #       }
-  #       ```
-
-  #       Output ONLY json code. Any plaintext or explanations are not allowed.
-  #     return: update_contact_customer_information_data
-  #   go_to:
-  #     data:
-  #     cases: []
-  #     default:
-  #       to: greeting
-  #       step: 4
-  # - type: callback
-  #   client:
-  #     name: update_contact_customer_information
-  #     args:
-  #       - update_contact_customer_information_data
-  #     return: update_contact_customer_information_result
-
-  
-  # no_topic:
-  #   type: process
-  #   client:
-  #     prompt: |
-  #       The customer's message is unrelated to the current conversation intent.
-
-  #       Customer message: $message
-
-  #       Your goals:
-  #       1. Respond naturally to the customer's request/question very shortly.
-  #       2. Politely point out that their message is off-topic.
-  #       3. Guide the customer back to the current conversation intent.
-
-  #       Output: ONLY the updated assistant message (no explanations, no extra text).
-  #   go_to:
-  #     data: 
-  #     cases: []
-  #     default:
-  #       to: finish
-  #       step: -1
+        According to chat history, update text more friendly and natively.
+        Output: ONLY updated assistant message (no explanations, no extra text, no code format).
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: fetch_service_addresses
+  fetch_service_addresses:
+    type: callback
+    client:
+      name: get_service_addresses
+      args: []
+      return: service_addresses
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: confirm_service_addresses

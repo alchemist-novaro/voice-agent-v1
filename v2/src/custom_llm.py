@@ -18,9 +18,9 @@ from typing import Callable
 from .workflow import Workflow
 
 class CustomLLM(llm.LLM):
-    def __init__(self, customer_id: str, config_path: str, disconnect: Callable) -> None:
+    def __init__(self, disconnect: Callable) -> None:
         super().__init__()
-        self.workflow = Workflow()
+        self.workflow = Workflow(disconnect)
 
     def chat(
         self,

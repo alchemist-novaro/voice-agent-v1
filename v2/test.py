@@ -6,19 +6,25 @@ from src.workflow import Workflow
 
 load_dotenv()
 
-async def disconnect():
-    print("The end")
+running = True
 
-workflow = Workflow()
+async def disconnect():
+    global running
+    running = False
+
+workflow = Workflow(disconnect)
 
 async def chat():
     print("Welcome to Real-time OpenAI Chatbot!")
     print("Type 'exit' to quit.\n")
 
-    while True:
+    global running
+
+    while running:
         user_input = input("You: ")
         if user_input.lower() in ("exit", "quit"):
-            break
+            running = False
+            continue
 
         print("AI is typing...")
 

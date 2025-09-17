@@ -19,7 +19,7 @@ nodes:
           - First Message Greeting
             ONLY if this is your FIRST message in the conversation:
             "Welcome to Acme! I'm Uno, your digital assistant." + [Continue naturally based on customer's request and conversation context]
-          - Customer Information
+          - Customer Contact Information and Service Addresses
             Ensure you have the customer's first name AND last name (both required), phone number, email and then requested service address.
         2. Service Information (intent: service)
           Detail:
@@ -47,7 +47,37 @@ nodes:
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), classify intent as greeting.
+
+        Example Intents:
+
+        ### intent: greeting
+        User: Hi
+        Assistant: Welcome to Acme! I'm Uno, your digital assistant. What can I assist you?
+        User: My AC is broken
+
+        ### intent: greeting
+        User: My AC is broken
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+                   If all is correct, could you confirm please?
+        User: Yes confirm
+
+        ### intent: greeting
+        User: My AC is broken
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+                   If all is correct, could you confirm please?
+        User: I want to update. My phone number is ...
+
+        ### intent: greeting
+        User: Yes confirm
+        Assistant: Thank you for confirming contact information. Next, could you please provide the address where you need the AC repair? This will help me make sure we send help to the right place.
+        User: 428 Seawind Street, Lakeway, TX 78734
+
+        ### intent: service
+        User: 428 Seawind Street, Lakeway, TX 78734
+        Assistant: Thanks for sharing your address! Could you tell me what type of property this is? For example, is it a house, a townhome, or something else? This helps me confirm if we can provide service at your location.
+        User: It's a house
   
+        # Important:
         Output only json code. Any plaintext or explanations are not allowed.
       return: intent_data
     go_to:
@@ -90,5 +120,6 @@ nodes:
       data: 
       cases: []
       default:
-        to: finish
-        step: -1
+        finished: true
+        to: intent
+        step: init

@@ -31,6 +31,10 @@ class Node:
             go_to_data = self.args[self.go_to_config["data"]]
             for case in self.go_to_config["cases"]:
                 if go_to_data[case["name"]] == case["value"]:
-                    self.args["next"] = {"to": case["to"], "step": case["step"]}
+                    self.args["next"] = {"to": case["to"], "step": case["step"], "finished": case.get("finished", False)}
                     return
-        self.args["next"] = self.go_to_config["default"]
+        self.args["next"] = {
+            "to": self.go_to_config["default"]["to"],
+            "step": self.go_to_config["default"]["step"],
+            "finished": self.go_to_config["default"].get("finished", False)
+        }

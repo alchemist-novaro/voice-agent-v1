@@ -23,7 +23,7 @@ def get_contact_information(customer_id: str, args: Any):
         "email_address": customer_info.get("email_address", None)
     }
 
-def get_addresses(customer_id: str, args: Any):
+def get_service_addresses(customer_id: str, args: Any):
     return {
         "addresses": customer_info.get("addresses", [])
     }
@@ -32,7 +32,12 @@ def set_contact_information(customer_id: str, args: Any):
     print(f"contact customer information is set. customer id: {customer_id}")
 
 def update_contact_information(customer_id: str, args: Any):
-    info_data = args["update_contact_customer_information_data"]
+    info_data = args["update_contact_information"]
+    if not info_data["updatable"]:
+        return {
+            "status": "failed"
+        }
+
     if info_data["full_name"]:
         customer_info["full_name"] = info_data["full_name"]
     if info_data["phone_number"]:
@@ -40,19 +45,23 @@ def update_contact_information(customer_id: str, args: Any):
     if info_data["email_address"]:
         customer_info["email_address"] = info_data["email_address"]
 
-    if not customer_info["full_name"] or not customer_info["phone_number"]:
+    if not customer_info["full_name"] and not customer_info["phone_number"]:
         return {
-            "status": "failed"
+            "status": "all_missed"
+        }
+    elif not customer_info["full_name"] or not customer_info["phone_number"]:
+        return {
+            "status": "some_missed"
         }
     else:
-        set_contact_customer_information(customer_id, args)
+        set_contact_information(customer_id, args)
         return {
-            "status": "success"
+            "status": "full"
         }
 
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information": get_contact_information,
-    "get_addresses": get_addresses,
+    "get_service_addresses": get_service_addresses,
     "set_contact_information": set_contact_information,
     "update_contact_information": update_contact_information
 }
