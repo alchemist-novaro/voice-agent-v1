@@ -37,7 +37,7 @@ nodes:
         - name: intent
           value: addresses
           to: greeting
-          step: fetch_service_addresses
+          step: go_to_addresses
       default:
         to: greeting
         step: init
@@ -136,7 +136,7 @@ nodes:
         - name: intent
           value: all_confirmed
           to: greeting
-          step: finish_contact_information
+          step: update_contact_status
         - name: intent
           value: update_contact
           to: greeting
@@ -152,6 +152,10 @@ nodes:
         """
         Thanks for reaching out me.
         I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
+        """
+        or 
+        """
+        About contact information, I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
         """
 
         Current Contact Information: $contact_information
@@ -196,6 +200,10 @@ nodes:
         Base text:
         """
         Sorry, but I can't find your contact information. It's necessary to make a new appointment. Could you share your contact information please?
+        """
+        or 
+        """
+        About contact information, unfortunately, I can't find your contact information. It's necessary to make a new appointment. Could you share your contact information please?
         """
         or 
         """
@@ -255,7 +263,7 @@ nodes:
         - name: status
           value: full
           to: greeting
-          step: finish_contact_information
+          step: update_contact_status
         - name: status
           value: some_missed
           to: greeting
@@ -264,6 +272,18 @@ nodes:
           value: all_missed
           to: greeting
           step: ask_contact_information
+      default:
+        to: greeting
+        step: update_contact_status
+  update_contact_status:
+    type: callback
+    client:
+      name: update_customer_status
+      args: []
+      return:
+    go_to:
+      data:
+      cases: []
       default:
         to: greeting
         step: finish_contact_information
@@ -288,6 +308,41 @@ nodes:
       default:
         to: greeting
         step: fetch_service_addresses
+  go_to_addresses:
+    type: callback
+    client:
+      name: get_customer_status
+      args: []
+      return: customer_status
+    go_to:
+      data: customer_status
+      cases:
+        - name: greeting_contact
+          value: true
+          to: greeting
+          step: fetch_service_addresses
+        - name: greeting_contact
+          value: false
+          to: greeting
+          step: reback_to_contact
+      default:
+        to: greeting
+        step: fetch_service_addresses
+  reback_to_contact:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Before discuss about service addresses, we need to ensure the contact information.
+        """
+        Update this text more friendly and natively
+
+        Output ONLY updated text. (no explanations, no extra text, no node format)
+    go_to:
+      default:
+        to: greeting
+        step: fetch_contact_information
   fetch_service_addresses:
     type: callback
     client:
@@ -299,4 +354,67 @@ nodes:
       cases: []
       default:
         to: greeting
-        step: confirm_service_addresses
+        step: analyze_service_addresses
+  analyze_service_addresses:
+    type: analyze
+    client:
+      prompt: |
+        Current addresses: $service_addresses
+        Analyze addresses and output json data as following schema:
+        ```json
+        {
+          "intent": string // exist | none | confirmed | update
+        }
+        ```
+        Here
+        exist: Service addresses exist but not confirmed yet
+        none: Service addresses not exist and before ask update
+        confirmed: Service addresses exist, and customer confirmed
+        update: Customer want update addresses
+
+        Example
+        ### intent: exist | none
+        Assistant: Sure thing! Let's update your phone number. Could you please provide the new phone number you'd like us to use?
+        User: 2655854565
+        Assistant: Thank you for providing phone number. I've updated your phone number.
+
+        ### intent: exist | none
+        Assistant: Thank you for reaching out. I've got your info on file as [full_name], and your phone number ends in [last_4_digits_phone_number], with the email address [email_address]. Is everything looking correct?
+        User: Yes, sure
+        Assistant: Got it. Thank you for your clearify.
+
+        ### intent: update
+        User: 6565656565
+        Assistant: I've got your updated phone number down. Thank you!
+        Assistant: Next, could you please provide the address where you need the AC repair? This will help me make sure we send help to the right place.
+        User: 428 Seawind Street, Lakeway, TX 78734
+
+        ### intent: confirmed
+        User: 6565656565
+        Assistant: I've got your updated phone number down. Thank you!
+        Assistant: Next, could you please provide the address where you need the AC repair? I see some addresses you have: [addresses]. Would you confirm that please?.
+        User: Yes, confirm.
+
+        ### intent: update
+        User: 6565656565
+        Assistant: I've got your updated phone number down. Thank you!
+        Assistant: Next, could you please provide the address where you need the AC repair? I see some addresses you have: [addresses]. Would you confirm that please?.
+        User: No, I want to receive service at 428 Seawind Street, Lakeway, TX 78734
+
+        Output only json code. Anly plaintext or explanations are not allowed.
+      return: intent_data
+    go_to:
+      data: intent_data
+      cases:
+        - name: intent
+          value: exist
+          to: greeting
+          step: confirm_service_addresses
+        - name: intent
+          value: none
+          to: greeting
+          step: ask_service_addresses
+        - name: intent
+          value: confirmed
+          to: greeting
+          step: 

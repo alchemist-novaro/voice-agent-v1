@@ -15,6 +15,13 @@ customer_info = {
         }
     ]
 }
+customer_status = {
+    "greeting_contact": False,
+    "greeting_addresses": False,
+    "service": False,
+    "property": False,
+    "dispatch": False
+}
 
 def get_contact_information(customer_id: str, args: Any):
     return {
@@ -59,9 +66,17 @@ def update_contact_information(customer_id: str, args: Any):
             "status": "full"
         }
 
+def update_customer_status(customer_id: str, args: Any):
+    customer_status["greeting_contact"] = True
+
+def get_customer_status(customer_id: str, args: Any):
+    return customer_status
+
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information": get_contact_information,
     "get_service_addresses": get_service_addresses,
     "set_contact_information": set_contact_information,
-    "update_contact_information": update_contact_information
+    "update_contact_information": update_contact_information,
+    "update_customer_status": update_customer_status,
+    "get_customer_status": get_customer_status
 }

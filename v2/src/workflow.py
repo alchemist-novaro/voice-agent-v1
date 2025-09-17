@@ -24,13 +24,7 @@ class Workflow:
                 "step": self.config["init_step"]
             },
             "global_system_prompt": config["global_system_prompt"],
-            "customer_id": f"{uuid.uuid4()}",
-            "status": {
-                "greeting": False,
-                "service": False,
-                "property": False,
-                "dispatch": False
-            }
+            "customer_id": f"{uuid.uuid4()}"
         }
         self.chat_history: deque[dict[str, str]] = deque(maxlen=config["chat_history_maxlen"])
         self.client = AsyncOpenAI()
