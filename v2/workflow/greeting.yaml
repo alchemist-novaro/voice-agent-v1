@@ -150,8 +150,7 @@ nodes:
       prompt: |
         Base text:
         """
-        Thanks for reaching out me.
-        I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
+        Before go ahead, I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
         """
         or 
         """
@@ -177,7 +176,7 @@ nodes:
       prompt: |
         Base text:
         """
-        I see your contact information in this file: [full_name], but can't find phone number. The email address is optional but if you provide it, it will be more helpful.
+        Before start, I see your contact information in this file: [full_name], but can't find phone number. The email address is optional but if you provide it, it will be more helpful.
         """
         or 
         """
@@ -307,7 +306,7 @@ nodes:
       cases: []
       default:
         to: greeting
-        step: fetch_service_addresses
+        step: fetch_service_addresses_first
   go_to_addresses:
     type: callback
     client:
@@ -355,6 +354,18 @@ nodes:
       default:
         to: greeting
         step: analyze_service_addresses
+  fetch_service_addresses_first:
+    type: callback
+    client:
+      name: get_service_addresses
+      args: []
+      return: service_addresses
+    go_to:
+      data:
+      cases: []
+      default:
+        to: greeting
+        step: analyze_service_addresses_first
   analyze_service_addresses:
     type: analyze
     client:
@@ -363,26 +374,14 @@ nodes:
         Analyze addresses and output json data as following schema:
         ```json
         {
-          "intent": string // exist | none | confirmed | update
+          "intent": confirmed | update
         }
         ```
         Here
-        exist: Service addresses exist but not confirmed yet
-        none: Service addresses not exist and before ask update
         confirmed: Service addresses exist, and customer confirmed
         update: Customer want update addresses
 
         Example
-        ### intent: exist | none
-        Assistant: Sure thing! Let's update your phone number. Could you please provide the new phone number you'd like us to use?
-        User: 2655854565
-        Assistant: Thank you for providing phone number. I've updated your phone number.
-
-        ### intent: exist | none
-        Assistant: Thank you for reaching out. I've got your info on file as [full_name], and your phone number ends in [last_4_digits_phone_number], with the email address [email_address]. Is everything looking correct?
-        User: Yes, sure
-        Assistant: Got it. Thank you for your clearify.
-
         ### intent: update
         User: 6565656565
         Assistant: I've got your updated phone number down. Thank you!
@@ -396,10 +395,42 @@ nodes:
         User: Yes, confirm.
 
         ### intent: update
-        User: 6565656565
+        Assistant: Thank you for reaching out. I've got your info on file as [full_name], and your phone number ends in [last_4_digits_phone_number], with the email address [email_address]. Is everything looking correct?
+        User: Yes, sure
         Assistant: I've got your updated phone number down. Thank you!
         Assistant: Next, could you please provide the address where you need the AC repair? I see some addresses you have: [addresses]. Would you confirm that please?.
         User: No, I want to receive service at 428 Seawind Street, Lakeway, TX 78734
+
+        Output only json code. Anly plaintext or explanations are not allowed.
+      return: intent_data
+    go_to:
+      data: intent_data
+      cases:
+        - name: intent
+          value: confirmed
+          to: greeting
+          step: validate_service_addresses
+        - name: intent
+          value: update
+          to: greeting
+          step: update_service_addresses
+      default:
+        to: greeting
+        step: validate_service_addresses
+  analyze_service_addresses_first:
+    type: analyze
+    client:
+      prompt: |
+        Current addresses: $service_addresses
+        Analyze addresses and output json data as following schema:
+        ```json
+        {
+          "intent": string // exist | none
+        }
+        ```
+        Here
+        exist: Service addresses exist in this list
+        none: Service addresses not exist in this list
 
         Output only json code. Anly plaintext or explanations are not allowed.
       return: intent_data
@@ -414,7 +445,6 @@ nodes:
           value: none
           to: greeting
           step: ask_service_addresses
-        - name: intent
-          value: confirmed
-          to: greeting
-          step: 
+      default:
+        to: greeting
+        step: validate_service_addresses
