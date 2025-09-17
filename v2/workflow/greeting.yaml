@@ -306,7 +306,7 @@ nodes:
       cases: []
       default:
         to: greeting
-        step: fetch_service_addresses_first
+        step: fetch_service_addresses
   go_to_addresses:
     type: callback
     client:
@@ -319,14 +319,14 @@ nodes:
         - name: greeting_contact
           value: true
           to: greeting
-          step: fetch_service_addresses
+          step: analyze_service_response
         - name: greeting_contact
           value: false
           to: greeting
           step: reback_to_contact
       default:
         to: greeting
-        step: fetch_service_addresses
+        step: analyze_service_response
   reback_to_contact:
     type: process
     client:
@@ -354,19 +354,38 @@ nodes:
       default:
         to: greeting
         step: analyze_service_addresses
-  fetch_service_addresses_first:
-    type: callback
+  analyze_service_addresses:
+    type: analyze
     client:
-      name: get_service_addresses
-      args: []
-      return: service_addresses
+      prompt: |
+        Current addresses: $service_addresses
+        Analyze addresses and output json data as following schema:
+        ```json
+        {
+          "intent": string // exist | none
+        }
+        ```
+        Here
+        exist: Service addresses exist in this list
+        none: Service addresses not exist in this list
+
+        Output only json code. Anly plaintext or explanations are not allowed.
+      return: intent_data
     go_to:
-      data:
-      cases: []
+      data: intent_data
+      cases:
+        - name: intent
+          value: exist
+          to: greeting
+          step: confirm_service_addresses
+        - name: intent
+          value: none
+          to: greeting
+          step: ask_service_addresses
       default:
         to: greeting
-        step: analyze_service_addresses_first
-  analyze_service_addresses:
+        step: confirm_service_addresses
+  analyze_service_response:
     type: analyze
     client:
       prompt: |
@@ -414,37 +433,6 @@ nodes:
           value: update
           to: greeting
           step: update_service_addresses
-      default:
-        to: greeting
-        step: validate_service_addresses
-  analyze_service_addresses_first:
-    type: analyze
-    client:
-      prompt: |
-        Current addresses: $service_addresses
-        Analyze addresses and output json data as following schema:
-        ```json
-        {
-          "intent": string // exist | none
-        }
-        ```
-        Here
-        exist: Service addresses exist in this list
-        none: Service addresses not exist in this list
-
-        Output only json code. Anly plaintext or explanations are not allowed.
-      return: intent_data
-    go_to:
-      data: intent_data
-      cases:
-        - name: intent
-          value: exist
-          to: greeting
-          step: confirm_service_addresses
-        - name: intent
-          value: none
-          to: greeting
-          step: ask_service_addresses
       default:
         to: greeting
         step: validate_service_addresses
