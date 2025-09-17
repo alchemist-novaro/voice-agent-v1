@@ -377,19 +377,62 @@ nodes:
         - name: intent
           value: exist
           to: greeting
-          step: confirm_service_addresses
+          step: ask_confirm_service_addresses
         - name: intent
           value: none
           to: greeting
           step: ask_service_addresses
       default:
         to: greeting
-        step: confirm_service_addresses
-  confirm_service_addresses:
+        step: ask_confirm_service_addresses
+  ask_confirm_service_addresses:
     type: process
     client:
       prompt: |
+        Base text:
+        """
+        Next, we need to confirm service receiving address. Would you confirm exact address among your service addresses: $service_addresses?
+        """
+        or 
+        """
+        We need to confirm service receiving address. Could you confirm exact address?
+        """
 
+        This is to ask confirm receiving address in existing service address list.
+        Please update above base text according to chat history more friendly, natively, and reasonably.
+
+        Output ONLY updated assistant message. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init
+  ask_service_addresses:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        Next, could you please provide the address where you need the [service]? This will help me make sure we send help to the right place.Next, We 
+        """
+        or
+        """
+        Could you provide address where you need to receive service?
+        """
+
+        This is to ask service receiving address.
+        Please update above base text according to chat history more friendly, more natively and reasonably.
+
+        Output ONLY updated assistant message. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init
   analyze_service_response:
     type: analyze
     client:
