@@ -1,0 +1,16 @@
+note: Property Information
+nodes:
+  init:
+    type: process
+    client:
+      prompt: |
+        Always verify the service request, check availability, schedule appointments, and provide information as needed.
+        Collect key details: property type, dispatch fee approval, issue details, preferred appointment time.
+        Be professional, helpful, and follow the conversation flow naturally.
+    go_to:
+      data: 
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init

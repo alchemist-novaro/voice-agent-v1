@@ -105,13 +105,13 @@ nodes:
 
         ### intent: all_confirmed
         User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
                    If all is correct, could you confirm please?
         User: Yes confirm
 
         ### intent: update_contact
         User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
                    If all is correct, could you confirm please?
         User: I want to update. My phone number is ...
 
@@ -149,11 +149,11 @@ nodes:
       prompt: |
         Base text:
         """
-        Before go ahead, I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
+        Before go ahead, I have your information on file: [full name], [phone_number], and email [email address]. Is this all correct?
         """
         or 
         """
-        About contact information, I have your information on file: [full name], phone ending in [last 4 digits], and email [email address]. Is this all correct?
+        About contact information, I have your information on file: [full name], [phone_number], and email [email address]. Is this all correct?
         """
 
         Current Contact Information: $contact_information
@@ -402,6 +402,10 @@ nodes:
         """
         We need to confirm service receiving address. Could you confirm exact address?
         """
+
+        Important: If address is already exist list, mention addresses.
+        Here exist list is: $
+        If exist, need to select, and if no list, need to get address.
 
         This is to ask confirm receiving address in existing service address list.
         Please update above base text according to chat history more friendly, natively, and reasonably.

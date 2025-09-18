@@ -19,8 +19,10 @@ nodes:
           - First Message Greeting  (greeting)
             ONLY if this is your FIRST message in the conversation:
             "Welcome to Acme! I'm Uno, your digital assistant." + [Continue naturally based on customer's request and conversation context]
-          - Customer Contact Information and Service Addresses  (service_address)
-            Ensure you have the customer's first name AND last name (both required), phone number, email and then requested service address.
+          - Customer Contact Information  (greeting)
+            Ensure you have the customer's first name AND last name (both required), phone number, email.
+          - Server Addresses (service_address)
+            Ensure requested service address
         2. Service Information (intent: service_information)
           Detail:
             Understand the customer's requested service and ensure it is supported and qualified.
@@ -47,7 +49,8 @@ nodes:
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), classify intent as greeting.
-        The service address topic is not service intent. It's in greeting intent.
+        Contact information related topic is for intent - greeting.
+        The service address topic is not service intent. It's in service_address intent.
 
         Example Intents:
 
@@ -58,13 +61,19 @@ nodes:
 
         ### intent: greeting
         User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
                    If all is correct, could you confirm please?
         User: Yes confirm
 
         ### intent: greeting
         User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], phone ending in [last 4 digits], and email [email address].
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
+                   If all is correct, could you confirm please?
+        User: no
+
+        ### intent: greeting
+        User: My AC is broken
+        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
                    If all is correct, could you confirm please?
         User: I want to update. My phone number is ...
 
@@ -101,7 +110,7 @@ nodes:
         - name: intent
           value: service_address
           to: greeting
-          step: init
+          step: go_to_addresses
         - name: intent
           value: service_information
           to: service
