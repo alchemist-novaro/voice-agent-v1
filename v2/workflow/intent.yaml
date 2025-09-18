@@ -9,19 +9,19 @@ nodes:
         Output intent data as json format with following schema:
         ```json
         {
-          "intent": string,    // intent of current message (greeting | service | property | dispatch | other)
+          "intent": string,    // intent of current message (greeting | service_address | service_information | property | dispatch | other)
         }
         ```
   
         The intent details are as following:
-        1. Greeting & Initial Customer Identification (intent: greeting)
+        1. Greeting & Initial Customer Identification (intent: greeting | service_address)
           Detail:
-          - First Message Greeting
+          - First Message Greeting  (greeting)
             ONLY if this is your FIRST message in the conversation:
             "Welcome to Acme! I'm Uno, your digital assistant." + [Continue naturally based on customer's request and conversation context]
-          - Customer Contact Information and Service Addresses
+          - Customer Contact Information and Service Addresses  (service_address)
             Ensure you have the customer's first name AND last name (both required), phone number, email and then requested service address.
-        2. Service Information (intent: service)
+        2. Service Information (intent: service_information)
           Detail:
             Understand the customer's requested service and ensure it is supported and qualified.
             - Classify the customer's requested service
@@ -68,30 +68,25 @@ nodes:
                    If all is correct, could you confirm please?
         User: I want to update. My phone number is ...
 
-        ### intent: greeting
+        ### intent: service_address
         User: Yes confirm
         Assistant: Thank you for confirming contact information. Next, could you please provide the address where you need the AC repair? This will help me make sure we send help to the right place.
         User: 428 Seawind Street, Lakeway, TX 78734
 
-        ### intent: greeting
+        ### intent: service_address
         User: yes, confirm
         Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
         User: no
 
-        ### intent: greeting
+        ### intent: service_address
         User: yes, confirm
         Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
         User: yes, correct
 
-        ### intent: greeting
+        ### intent: service_address
         User: yes, confirm
         Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
         User: No, my address is ...
-
-        ### intent: service
-        User: 428 Seawind Street, Lakeway, TX 78734
-        Assistant: Thanks for sharing your address! Could you tell me what type of property this is? For example, is it a house, a townhome, or something else? This helps me confirm if we can provide service at your location.
-        User: It's a house
   
         # Important:
         Output only json code. Any plaintext or explanations are not allowed.
@@ -104,7 +99,11 @@ nodes:
           to: greeting
           step: init
         - name: intent
-          value: service
+          value: service_address
+          to: greeting
+          step: init
+        - name: intent
+          value: service_information
           to: service
           step: init
         - name: intent

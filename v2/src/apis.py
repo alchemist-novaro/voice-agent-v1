@@ -25,7 +25,7 @@ customer_status = {
 }
 
 with open('./data/services.json') as f:
-    services: list[Any] = json.loads(f)
+    services: list[Any] = json.load(f)
 
 def get_contact_information(customer_id: str, args: Any):
     return {
@@ -102,7 +102,7 @@ def validate_service_address(customer_id: str, args: Any):
         "validated": True
     }
 
-def get_service_types(customer_id: str, args: Any):
+def get_services(customer_id: str, args: Any):
     seen = set()
     service_list = []
     for service in services:
@@ -124,11 +124,16 @@ def check_service(customer_id: str, args: Any):
         if _service["trade"] == service["trade"] and \
             _service["serviceable_type"] == service["serviceable_type"] and \
             _service["service_type"] == service["service_type"]:
-            return {
+            customer_info["service"] = {
                 "support": "support" if service["is_overbookable"] else "some_support",
-                "qualification_questions": service["qualification_questions"]
+                "qualification_questions": [{
+                    "question": question["qualification_questions"],
+                    "answered": False,
+                    "answer": "",
+                } for question in service["qualification_questions"]]
             }
-    return {
+            return customer_info["service"]
+    customer_info["service"] = {
         "support": "not_support",
         "qualification_questions": []
     }
@@ -142,5 +147,6 @@ API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_customer_status":          get_customer_status,
     "finish_greeting_agent":        finish_greeting_agent,
     "validate_service_address":     validate_service_address,
-    "get_service_types":            get_service_types
+    "get_services":                 get_services,
+    "check_service":                check_service
 }

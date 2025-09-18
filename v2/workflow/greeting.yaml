@@ -518,6 +518,7 @@ nodes:
         """
 
         Update assistant message more friendly and natively according to chat history.
+        Don't ask any question or confirmation. It's for finishing and should move next step.
 
         Output ONLY updated assistant message. (no explanations, no extra text, no code format)
     go_to:

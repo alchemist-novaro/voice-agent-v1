@@ -27,9 +27,7 @@ nodes:
     type: analyze
     client:
       prompt: |
-        Analyze customer message: $message
-        
-        Goal: Classify service
+        Goal: Analyze chat history and classify service
         Output schema:
         ```json
         {
@@ -46,3 +44,57 @@ nodes:
         Output only json format code. Any explanations or plaintext are not allowed.
       return: service
     go_to:
+      data: service
+      cases:
+        - name: can_not_find
+          value: true
+          to: service
+          step: not_support_service
+      default:
+        to: service
+        step: check_service
+  check_service:
+    type: callback
+    client:
+      name: check_service
+      args:
+        - service
+      return: service_check_result
+    go_to:
+      data: service_check_result
+      cases:
+        - name: support
+          value: support
+          to: service
+          step: ask_qualification_questions
+        - name: support
+          value: some_support
+          to: service
+          step: ask_confirm_disqualification
+        - name: support
+          value: not_support
+          to: service
+          step: not_support_service
+  not_support_service:
+    type: process
+    client:
+      prompt: |
+        Base text
+        """
+        Sorry, but we don't support service what you want. Can I help you for other thing? If you troubling because of other thing, please let me know. We're trying to help you.
+        """
+        or
+        """
+        unfortunately, we don't service what you want. But I think we can help you in other things. Please let me know if you need help.
+        """
+
+        Update this assistant message more friendly and reasonably.
+
+        Output ONLY updated text. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init
