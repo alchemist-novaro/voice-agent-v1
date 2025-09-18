@@ -127,7 +127,7 @@ def check_service(customer_id: str, args: Any):
             customer_info["service"] = {
                 "support": "support" if service["is_overbookable"] else "some_support",
                 "qualification_questions": [{
-                    "question": question["qualification_questions"],
+                    "question": question,
                     "answered": False,
                     "answer": "",
                 } for question in service["qualification_questions"]]
