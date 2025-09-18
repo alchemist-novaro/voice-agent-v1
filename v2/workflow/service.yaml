@@ -1,0 +1,48 @@
+note: Service Information
+nodes:
+  init:
+    type: analyze
+    client:
+      prompt: |
+      return:
+    go_to:
+      data:
+      cases: []
+      defualt:
+        to: service
+        step: collect_services
+  collect_services:
+    type: callback
+    client:
+      name: get_services
+      args: []
+      return: services
+    go_to:
+      data:
+      cases: []
+      default:
+        to: service
+        step: classify_service
+  classify_service:
+    type: analyze
+    client:
+      prompt: |
+        Analyze customer message: $message
+        
+        Goal: Classify service
+        Output schema:
+        ```json
+        {
+          "trade": string, // electronical | plumbing | etc...
+          "serviceable_type": string // Car Chargers | Tankless Wh | Sewer Drain | etc...
+          "service_type": string // Replace | Inspection | Connect | etc...
+          "can_not_find": boolean // It's true if you can't find service from list
+        }
+        ```
+
+        The service list:
+        $services
+
+        Output only json format code. Any explanations or plaintext are not allowed.
+      return: service
+    go_to:

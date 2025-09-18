@@ -1,0 +1,938 @@
+[
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "What type of system are you lookng for?",
+      "Do you currently have a functioning system?",
+      "How many units are looking to replace or install?",
+      "Location of the equipment",
+      "How soon you want to get this done?"
+    ],
+    "serviceable_type": "Air Conditioning",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you Describe the issue?",
+      "How many number of units do you have?",
+      "What's the age of equipment?",
+      "Do you know the type of your equipment?"
+    ],
+    "serviceable_type": "Air Conditioning",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is your system working properly?",
+      "How many systems do you have?",
+      "Age of the equipment",
+      "Type of equipment",
+      "Location of the equipment"
+    ],
+    "serviceable_type": "Air Conditioning",
+    "service_type": "Tune-up"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "What type of system are you looking for?",
+      "Do you currently have a functioning system?",
+      "How many units are looking to replace or install?",
+      "Location of the equipment",
+      "How soon are you looking to have the new system installed?",
+      "What energy Source are you currently using, Like Gas, oil, or electric?"
+    ],
+    "serviceable_type": "Furnace",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you Describe the issue?",
+      "How many number of units do you have?",
+      "What's the age of equipment?",
+      "Do you know the type of your equipment?",
+      "What energy Source are you currently using, Gas, oil, or electric?"
+    ],
+    "serviceable_type": "Furnace",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is your system working properly?",
+      "Age of the equipment",
+      "Type of equipment",
+      "Location of the equipment"
+    ],
+    "serviceable_type": "Furnace",
+    "service_type": "Tune-up"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "What type of system are you lookng for?",
+      "Do you currently have a functioning system?",
+      "Location of the equipment",
+      "How soon are you looking to have the new system installed?",
+      "What energy Source are you currently using, Like Gas, oil, or electric?"
+    ],
+    "serviceable_type": "Boiler",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you Describe the issue?",
+      "How long has this been happening?",
+      "Age of equipment",
+      "Type of equipment?",
+      "What energy Source are you currently using, Gas, oil, or electric?"
+    ],
+    "serviceable_type": "Boiler",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is your system working properly?",
+      "Age of equipment",
+      "Type of equipment?",
+      "What energy Source are you currently using, Gas, oil, or electric?"
+    ],
+    "serviceable_type": "Boiler",
+    "service_type": "Tune-up"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Age of the equipment",
+      "Location of the equipment",
+      "How soon you want to get this"
+    ],
+    "serviceable_type": "Humidifier",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "How many units do you have?",
+      "Age of equipment",
+      "Type of equipment",
+      "Equipment currently working properly?"
+    ],
+    "serviceable_type": "Humidifier",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Age of the equipment",
+      "Type of equipment",
+      "Location of the equipment"
+    ],
+    "serviceable_type": "Humidifier",
+    "service_type": "Tune-up"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Age of the equipment",
+      "Location of the equipment",
+      "How soon you want to get this installed?"
+    ],
+    "serviceable_type": "Air Cleaner",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Number of units",
+      "Age of equipment",
+      "Type of equipment",
+      "Equipment currently working properly?"
+    ],
+    "serviceable_type": "Air Cleaner",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Age of the equipment",
+      "Type of equipment",
+      "Location of the equipment"
+    ],
+    "serviceable_type": "Air Cleaner",
+    "service_type": "Tune Up"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "How soon you want to get this"
+    ],
+    "serviceable_type": "Duct",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Number of units",
+      "Age of equipment",
+      "Type of equipment",
+      "Equipment currently working properly?"
+    ],
+    "serviceable_type": "Duct",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "hvac",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Size of Home",
+      "How many runs are there?"
+    ],
+    "serviceable_type": "Duct",
+    "service_type": "Cleaning"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Do you have any existing plumbing issues that might affect the new appliance connection?",
+      "Are there existing connections or are we running new lines?"
+    ],
+    "serviceable_type": "Kitchen Appliance",
+    "service_type": "Connect"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Have you noticed any leaks or damage around it the appliance that could indicate an issue?",
+      "Are there concerns about shutting off water or gas lines safely during the disconnection?"
+    ],
+    "serviceable_type": "Kitchen Appliance",
+    "service_type": "Disconnect"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Do you have any existing plumbing issues that might affect the new appliance connection?",
+      "Are there existing connections or are we running new lines?"
+    ],
+    "serviceable_type": "Bathroom Appliance",
+    "service_type": "Connect"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Have you noticed any leaks or damage around it the appliance that could indicate an issue?",
+      "Are there concerns about shutting off water or gas lines safely during the disconnection?"
+    ],
+    "serviceable_type": "Bathroom Appliance",
+    "service_type": "Disconnect"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is this for an annual backflow test or a different type of inspection?",
+      "Do you know the make and model of the backflow device?",
+      "Is this for a residential or commercial property?",
+      "When are you hoping to have the inspection completed?\""
+    ],
+    "serviceable_type": "Backflow",
+    "service_type": "Inspection"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Has the backflow device failed an inspection, or are there known issues?",
+      "When are you hoping to move forward with the work?\""
+    ],
+    "serviceable_type": "Backflow",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "How long has this been going on?",
+      "Have you had this serviced previously?",
+      "Is there any other drain having issues?",
+      "Are you able to use the facilities in your home?"
+    ],
+    "serviceable_type": "Small Drain",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issue causing the need for a replacement?",
+      "How soon are you looking to have the work completed?"
+    ],
+    "serviceable_type": "Small Drain",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been going on for?",
+      "Is your fauct single handle, or double?",
+      "Is there a water shut off valve accessible?"
+    ],
+    "serviceable_type": "Faucet",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issue you've noticed that is causing the need for replacement?",
+      "Is your faucet a single handle, or double?",
+      "Will you be supplying the faucet or would you like us to bring one?",
+      "Is there a water shut off valve accessible?"
+    ],
+    "serviceable_type": "Faucet",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been going on for?",
+      "Is this the only restroom in the home?",
+      "Could anything have been flushed, or dropped into the toilet that may have caused your issue?"
+    ],
+    "serviceable_type": "Toilet",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issue you've noticed that is causing the need for replacement?",
+      "Will you be supplying the new toilet, or would you like us to bring one?"
+    ],
+    "serviceable_type": "Toilet",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "Has this happened before?",
+      "Could anything have been flushed or dropped that may be causing the issues you're having?"
+    ],
+    "serviceable_type": "Urinal",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issue you've noticed that is causing the need for replacement?",
+      "Are there any specific requirements we should be aware of when replacing the urinal?"
+    ],
+    "serviceable_type": "Urinal",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe what you are looking to have done?",
+      "How soon are you looking to complete the project?"
+    ],
+    "serviceable_type": "Kitchen Remodel",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe what you are looking to have done?",
+      "How soon are you looking to complete the project?"
+    ],
+    "serviceable_type": "Bathroom Remodel",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been going on?",
+      "Have you ever had this issue the before?",
+      "Where is it located?",
+      "Is there any property damage?",
+      "Are you able to shut off the water, or have you already done so?"
+    ],
+    "serviceable_type": "Leaks",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issues causing the need for replacement?",
+      "Do you know the type of piping you currently have?",
+      "Is the area easily accessible?"
+    ],
+    "serviceable_type": "Pipe Replacement",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Are you adding new fixtures or appliances that require a water line connection?",
+      "Do you have any concerns about the pressure or quality of the water supply for new lines?"
+    ],
+    "serviceable_type": "Water Lines",
+    "service_type": "Connect"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you describe the issue you're having?",
+      "How long has it been happening?",
+      "Is there an accessible shut off valve?"
+    ],
+    "serviceable_type": "Tub & Shower",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue you've noticed that is causing the need for replacement?",
+      "Is there any specific equipment you need, or will you be providing any material?"
+    ],
+    "serviceable_type": "Tub & Shower",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you're having?",
+      "When did this start?",
+      "Have you had this problem previously?",
+      "Do you know the brand of your current disposal?"
+    ],
+    "serviceable_type": "Garbage Disposal",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issue causing the need for replacement?",
+      "Are you providing the new equipment or would you like us to bring one?"
+    ],
+    "serviceable_type": "Garbage Disposal",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been happening?",
+      "Have you already contacted the water company?"
+    ],
+    "serviceable_type": "Water Main",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue you've noticed that is causing the need for replacement?",
+      "Is there visible water pooling on your property, indicating a possible main line break?",
+      "How soon are you looking to complete the project?"
+    ],
+    "serviceable_type": "Water Main",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been going on?",
+      "Which drains are you having issues with?",
+      "Is there an accessible clean out?"
+    ],
+    "serviceable_type": "Sewer Drain",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue you've noticied that is causing the need for the estimate?",
+      "Are there signs of sewage leakage or foul odors affecting your indoor environment?"
+    ],
+    "serviceable_type": "Sewer Drain",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been going on?",
+      "Which drains are you having issues with?",
+      "Is there an accessible clean out?"
+    ],
+    "serviceable_type": "Main Line",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue you've noticed that is causing the need for the estimate?",
+      "How soon are you looking to complete the project?"
+    ],
+    "serviceable_type": "Main Line",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you are having?",
+      "How long has this been going on?",
+      "Have you recently had your system serviced?"
+    ],
+    "serviceable_type": "Water Softner",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there na issue you've noticed that is causing the need for the estimate?",
+      "How soon are you looking to complete the project?"
+    ],
+    "serviceable_type": "Water Softener",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you're having?",
+      "How long has this been going on?",
+      "Is the water filter leaking, or has it stopped improving water quality?",
+      "Have you noticed debris or discoloration in your filtered water?"
+    ],
+    "serviceable_type": "Water Filter",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue you've noticed that is causing the need for an estimate?",
+      "How large is your home?",
+      "How soon are you looking to have the project completed?"
+    ],
+    "serviceable_type": "Water Filter",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue that has prompted you to schedule the inspection?",
+      "Are there any odors, slow drains, or unusual noises in your plumbing fixtures?"
+    ],
+    "serviceable_type": "General",
+    "service_type": "Inspection"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Describe the issue you're having",
+      "Has this happened before??",
+      "Is your currently or has it recently been flooded?"
+    ],
+    "serviceable_type": "Sump Pump",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there any issues you've noticed recently promted your request?",
+      "Is there any active property damage?"
+    ],
+    "serviceable_type": "Sump Pump",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Describe the issue you're having:",
+      "Has this happened before?",
+      "Where is the water heater located?",
+      "Do you know the size and energy source?",
+      "Have you noticed any leaks? If so where is the leak coming from?",
+      "How old is your water heater?"
+    ],
+    "serviceable_type": "Water Heater",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Is your current water heater leaking or not producing hot water at all?",
+      "Do you know the size and energy source of your current system?",
+      "Where is the water heater located?"
+    ],
+    "serviceable_type": "Water Heater",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is your water heater working properly?",
+      "What is the size and energy source of your water heater?",
+      "How old is your water heater?"
+    ],
+    "serviceable_type": "Water Heater",
+    "service_type": "Tune-up"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Describe your issue",
+      "How long has this been going on?",
+      "Where is the unit located?",
+      "How old is your system?",
+      "Have you noticed any error codes or strange sounds coming from the unit?"
+    ],
+    "serviceable_type": "Tankless WH",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue you've noticed that is causing the need for an estimate?",
+      "Do you currently have a tankless system?",
+      "How soon are you looking to have this installed?"
+    ],
+    "serviceable_type": "Tankless WH",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is your system working properly?",
+      "Do you know the age of your system?",
+      "Where is it located?"
+    ],
+    "serviceable_type": "Tankless WH",
+    "service_type": "Maintenance"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Describe the issue you're experiencing",
+      "How long has this been going on?",
+      "Have you had this issue previously?"
+    ],
+    "serviceable_type": "Water Pump",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an issue that has prompted you to schedule the estimate?",
+      "How soon are you looking to have this completed?"
+    ],
+    "serviceable_type": "Water Pump",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "plumbing",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is this a new sprinkler system or a reconnection to an existing one?",
+      "Has the piping or irrigation already been installed?",
+      "Will this connect to city water or a well system?",
+      "How soon are you looking to have this completed?"
+    ],
+    "serviceable_type": "Sprinklers",
+    "service_type": "Connect"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Describe the issue you're having",
+      "How long has this been going on?",
+      "Have you had this issue previously?",
+      "Do you know the approximate age of your panel or home?"
+    ],
+    "serviceable_type": "Panel",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Are you experiencing any issues that have prompted this estimate?",
+      "How soon are you looking to complete this project?"
+    ],
+    "serviceable_type": "Panel",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Can you describe the issue you’re having with your Generator?",
+      "Do you know the size and brand of your generator?",
+      "Is there an error code?",
+      "Have you already attempted to reset the generator?"
+    ],
+    "serviceable_type": "Generators",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Are you looking to power your entire home, or just portions of your home?",
+      "What is the approximate square footage of your home?",
+      "What age is your home?",
+      "What age is your panel?",
+      "How soon are you looking to get a generator?"
+    ],
+    "serviceable_type": "Generators",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Describe the issue you're having: ;",
+      "Has this happened before?",
+      "Where at in the home is it located?"
+    ],
+    "serviceable_type": "Indoor Equipment",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": true,
+    "qualification_questions": [
+      "Describe the issue you're having",
+      "Has this happened before?",
+      "Have you done any trouble shooting steps?",
+      "Where is your panel located?"
+    ],
+    "serviceable_type": "Partial loss of power",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Describe the issue you're experiencing",
+      "Has this happened before?",
+      "Is there power running to the fixture/system?"
+    ],
+    "serviceable_type": "Outdoor Equipment",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Is there an active issue that is prompting this estimate?",
+      "How soon are you looking to have this completed?"
+    ],
+    "serviceable_type": "Outdoor Equipment",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "What type of appliance are you looking to have connected?",
+      "Is this a new appliance or a replacement?",
+      "Has the appliance already been delivered and is it on-site?",
+      "Is there already an outlet or dedicated circuit available for the appliance?",
+      "When are you hoping to have this completed?\""
+    ],
+    "serviceable_type": "Appliances",
+    "service_type": "Connect"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "Describe your issue",
+      "How long has this been happening",
+      "Have you experienced this before?"
+    ],
+    "serviceable_type": "Car Chargers",
+    "service_type": "Repair"
+  },
+  {
+    "trade": "electrical",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "What type of electric vehicle do you have or plan to have?",
+      "Do you already have a charger or are you looking for recommendations?",
+      "Where is your electrical panel located?",
+      "Do you know if your panel has capacity for an additional circuit?",
+      "When are you hoping to have the installation completed?\""
+    ],
+    "serviceable_type": "Car Chargers",
+    "service_type": "Estimate"
+  },
+  {
+    "trade": "window_cleaning",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "How many stories is the building/home?",
+      "Do you need both interior and exterior window cleaning, or just exterior?",
+      "Are there any hard-to-reach windows or skylights?",
+      "Are there storm windows or window screens that need to be removed or cleaned?"
+    ],
+    "serviceable_type": "General",
+    "service_type": "Cleaning"
+  },
+  {
+    "trade": "window_cleaning",
+    "potential_revenue": 0.0,
+    "is_overbookable": false,
+    "qualification_questions": [
+      "What is the material of the surface (vinyl, brick, concrete, wood, stucco, etc.)?",
+      "Are there any known stains or buildup (mold, algae, oil, rust)?",
+      "Are there HOA restrictions or noise ordinances we should be aware of?",
+      "Are there delicate surfaces or areas we should avoid (e.g., painted surfaces, aged wood)?"
+    ],
+    "serviceable_type": "Power Washing",
+    "service_type": "Pressure Washing"
+  }
+]

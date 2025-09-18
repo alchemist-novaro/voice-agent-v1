@@ -1,4 +1,4 @@
-note: "Greeting & Initial Customer Identificatoin"
+note: Greeting & Initial Customer Identificatoin
 nodes:
   init:
     type: analyze
@@ -334,7 +334,11 @@ nodes:
         """
         Before discuss about service addresses, we need to ensure the contact information.
         """
-        Update this text more friendly and natively
+        or 
+        """
+        We need to confirm contact information first.
+        """
+        Update this text more friendly and natively according to chat history
 
         Output ONLY updated text. (no explanations, no extra text, no node format)
     go_to:
@@ -546,7 +550,7 @@ nodes:
         - name: service
           value: false
           to: service
-          step: init
+          step: collect_services
         - name: property
           value: false
           to: property

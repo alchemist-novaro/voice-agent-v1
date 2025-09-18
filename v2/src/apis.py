@@ -1,3 +1,4 @@
+import json
 from typing import Callable, Any
 
 customer_info = {
@@ -22,6 +23,9 @@ customer_status = {
     "property": False,
     "dispatch": False
 }
+
+with open('./data/services.json') as f:
+    services: list[Any] = json.loads(f)
 
 def get_contact_information(customer_id: str, args: Any):
     return {
@@ -98,6 +102,37 @@ def validate_service_address(customer_id: str, args: Any):
         "validated": True
     }
 
+def get_service_types(customer_id: str, args: Any):
+    seen = set()
+    service_list = []
+    for service in services:
+        item = {
+            "trade": service["trade"],
+            "serviceable_type": service["serviceable_type"],
+            "service_type": service["service_type"],
+        }
+        # convert dict to tuple for hashability
+        key = (item["trade"], item["serviceable_type"], item["service_type"])
+        if key not in seen:
+            seen.add(key)
+            service_list.append(item)
+    return service_list
+
+def check_service(customer_id: str, args: Any):
+    _service = args["service"]
+    for service in services:
+        if _service["trade"] == service["trade"] and \
+            _service["serviceable_type"] == service["serviceable_type"] and \
+            _service["service_type"] == service["service_type"]:
+            return {
+                "support": "support" if service["is_overbookable"] else "some_support",
+                "qualification_questions": service["qualification_questions"]
+            }
+    return {
+        "support": "not_support",
+        "qualification_questions": []
+    }
+
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information":      get_contact_information,
     "get_service_addresses":        get_service_addresses,
@@ -106,5 +141,6 @@ API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "update_customer_status":       update_customer_status,
     "get_customer_status":          get_customer_status,
     "finish_greeting_agent":        finish_greeting_agent,
-    "validate_service_address":     validate_service_address
+    "validate_service_address":     validate_service_address,
+    "get_service_types":            get_service_types
 }

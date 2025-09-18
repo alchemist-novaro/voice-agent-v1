@@ -1,4 +1,4 @@
-note: "Classify Intents"
+note: Classify Intents
 nodes:
   init:
     type: analyze
