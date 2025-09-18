@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from livekit import api
 from datetime import timedelta
+import uuid
 
 load_dotenv()
 
@@ -25,7 +26,7 @@ app.add_middleware(
 @app.get("/api/connection-details")
 async def get_token(identity: str, room: str = "voice-room"):
     at = api.AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET)
-    at.with_grants(api.VideoGrants(room_join=True, room=room))
+    at.with_grants(api.VideoGrants(room_join=True, room=f"room-{uuid.uuid4()}"))
     at.with_identity(identity)
     at.with_ttl(timedelta(4))
     token = at.to_jwt()

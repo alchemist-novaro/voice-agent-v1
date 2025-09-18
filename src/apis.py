@@ -186,17 +186,33 @@ def _clean_dict(d: dict, expiry: timedelta):
     for k in keys_to_delete:
         del d[k]
 
-def _clean_output_chunks(chunks: dict[str, list[tuple[Any, datetime]]]):
-    """Clean lists of (value, timestamp) inside a dict."""
+def _clean_output_chunks(chunks: dict[str, queue.Queue[tuple[Any, datetime]]]):
+    """Clean queues of (value, timestamp) inside a dict."""
     now = datetime.now()
     keys_to_delete = []
-    for k, items in chunks.items():
-        # Keep only fresh items
+
+    for k, q in list(chunks.items()):  # copy items to avoid size-change error
+        items = []
+        # Drain the queue safely
+        while not q.empty():
+            try:
+                items.append(q.get_nowait())
+            except queue.Empty:
+                break
+
+        # Keep only fresh ones
         fresh_items = [(v, ts) for v, ts in items if now - ts < EXPIRY]
+
         if fresh_items:
-            chunks[k] = fresh_items
+            # Refill the queue with fresh items
+            new_q: queue.Queue[tuple[Any, datetime]] = queue.Queue()
+            for item in fresh_items:
+                new_q.put(item)
+            chunks[k] = new_q
         else:
             keys_to_delete.append(k)
+
+    # Delete keys with no fresh items
     for k in keys_to_delete:
         del chunks[k]
 

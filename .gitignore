@@ -145,7 +145,6 @@ dmypy.json
 *.csv
 *.xml
 *.yml
-data/
 datasets/
 models/
 checkpoints/
