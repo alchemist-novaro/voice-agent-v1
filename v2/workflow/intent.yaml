@@ -4,9 +4,7 @@ nodes:
     type: analyze
     client:
       prompt: |
-        Analyze the chat history and classify intent of received message.
-        Current message: $message
-        Output intent data as json format with following schema:
+        Output intent data as json format with following schema based on chat history:
         ```json
         {
           "intent": string,    // intent of current message (greeting | service_address | service_information | property | dispatch | other)
@@ -20,16 +18,13 @@ nodes:
             ONLY if this is your FIRST message in the conversation:
             "Welcome to Acme! I'm Uno, your digital assistant." + [Continue naturally based on customer's request and conversation context]
           - Customer Contact Information  (greeting)
-            Ensure you have the customer's first name AND last name (both required), phone number, email.
+            Customer contact information (full_name, phone_number, email) asking and responding or confirming
           - Server Addresses (service_address)
-            Ensure requested service address
+            Asking requested service address and answering or confirming
         2. Service Information (intent: service_information)
           Detail:
-            Understand the customer's requested service and ensure it is supported and qualified.
-            - Classify the customer's requested service
-            - Qualify the service
-            - Ask the customer about the disqualifications.
-            - Disqualify the service and inform the customer that you won't be able to provide the service
+            - Qualification question asking and answer
+            - Ask about Dequalification 
         3. Property Information (intent: property)
           Detail:
             Understand if the customer is the property owner and deduce the property type from the conversation.
@@ -49,53 +44,6 @@ nodes:
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), classify intent as greeting.
-        Contact information related topic is for intent - greeting.
-        The service address topic is not service intent. It's in service_address intent.
-
-        Example Intents:
-
-        ### intent: greeting
-        User: Hi
-        Assistant: Welcome to Acme! I'm Uno, your digital assistant. What can I assist you?
-        User: My AC is broken
-
-        ### intent: greeting
-        User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
-                   If all is correct, could you confirm please?
-        User: Yes confirm
-
-        ### intent: greeting
-        User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
-                   If all is correct, could you confirm please?
-        User: no
-
-        ### intent: greeting
-        User: My AC is broken
-        Assistant: Before start, I wanna confirm your contact information. I've see your information is existing with this file: [full_name], [phone_number], and email [email address].
-                   If all is correct, could you confirm please?
-        User: I want to update. My phone number is ...
-
-        ### intent: service_address
-        User: Yes confirm
-        Assistant: Thank you for confirming contact information. Next, could you please provide the address where you need the AC repair? This will help me make sure we send help to the right place.
-        User: 428 Seawind Street, Lakeway, TX 78734
-
-        ### intent: service_address
-        User: yes, confirm
-        Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
-        User: no
-
-        ### intent: service_address
-        User: yes, confirm
-        Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
-        User: yes, correct
-
-        ### intent: service_address
-        User: yes, confirm
-        Assistant: Thanks for confirming your details! Great! Now, could you please confirm if the service is needed at 428 Seawind Street, Lakeway, TX 78734?
-        User: No, my address is ...
   
         # Important:
         Output only json code. Any plaintext or explanations are not allowed.
@@ -111,10 +59,10 @@ nodes:
           value: service_address
           to: greeting
           step: go_to_addresses
-        - name: intent
-          value: service_information
-          to: service
-          step: init
+        # - name: intent
+        #   value: service_information
+        #   to: service
+        #   step: init
         - name: intent
           value: property
           to: property

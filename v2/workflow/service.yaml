@@ -1,16 +1,19 @@
 note: Service Information
 nodes:
   init:
-    type: analyze
+    type: callback
     client:
-      prompt: |
+      name: save_qualification_answer
+      args:
+        - message
+        - qualification_question
       return:
     go_to:
       data:
       cases: []
-      defualt:
+      default:
         to: service
-        step: collect_services
+        step: loop_qualification_questions
   collect_services:
     type: callback
     client:
@@ -66,11 +69,12 @@ nodes:
         - name: support
           value: support
           to: service
-          step: ask_qualification_questions
+          step: loop_qualification_questions
         - name: support
           value: some_support
           to: service
-          step: ask_confirm_disqualification
+          # step: ask_confirm_disqualification
+          step: not_support_service
         - name: support
           value: not_support
           to: service
@@ -96,5 +100,102 @@ nodes:
       cases: []
       default:
         finished: true
-        to: intent
+        to: canceled
+        step: -1
+  loop_qualification_questions:
+    type: callback
+    client:
+      name: get_qualification_question
+      args: []
+      return: qualification_question
+    go_to:
+      data: qualification_question
+      cases:
+        - name: answered
+          value: false
+          to: service
+          step: ask_qualification_question
+        - name: answered
+          value: null
+          to: service
+          step: finish_agent
+      default:
+        to: service
+        step: finish_agent
+  ask_qualification_question:
+    type: process
+    client:
+      prompt: |
+        You are an assistant to collect answers about qualification questions.
+        This is current question need to collect answer.
+        $qualification_question
+
+        Please ask question and collect answer.
+        According to chat history:
+        - If first asking, mention the service is supportable, and to ensure more details you want to get answers about qualification questions.
+        - After that, ask questios with prefix like Next, Also, or other words.
+        - The keep the original qualification question. Don't update question.
+
+        Important: I need assistant asking message only.
+        Output ONLY assistant message. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: service
         step: init
+  finish_agent:
+    type: callback
+    client:
+      name: finish_service_agent
+      args: []
+      return:
+    go_to:
+      data:
+      cases: []
+      default:
+        to: service
+        step: output_thanks_message
+  output_thanks_message:
+    type: process
+    client:
+      prompt: |
+        Output thanks message about answering for qualification questions.
+        And mention it will be helpful to determine your worries and fix them.
+
+        Output ONLY assistant message. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        to: service
+        step: go_to_other_agent
+  go_to_other_agent:
+    type: callback
+    client:
+      name: get_customer_status
+      args: []
+      return: customer_status
+    go_to:
+      data: customer_status
+      cases:
+        - name: greeting
+          value: false
+          to: greeting
+          step: fetch_contact_information
+        - name: service_address
+          value: false
+          to: greeting
+          step: go_to_addresses
+        - name: property
+          value: false
+          to: property
+          step: init
+        - name: dispatch
+          value: false
+          to: dispatch
+          step: init
+      default:
+        to: completed
+        step: -1      

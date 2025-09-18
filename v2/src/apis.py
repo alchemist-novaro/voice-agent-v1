@@ -17,9 +17,9 @@ customer_info = {
     ]
 }
 customer_status = {
-    "greeting_contact": False,
-    "greeting_addresses": False,
-    "service": False,
+    "greeting": False,
+    "service_address": False,
+    "service_information": False,
     "property": False,
     "dispatch": False
 }
@@ -71,14 +71,18 @@ def update_contact_information(customer_id: str, args: Any):
         }
 
 def update_customer_status(customer_id: str, args: Any):
-    customer_status["greeting_contact"] = True
+    customer_status["greeting"] = True
 
 def get_customer_status(customer_id: str, args: Any):
     return customer_status
 
 def finish_greeting_agent(customer_id: str, args: Any):
-    customer_status["greeting_addresses"] = True
+    customer_status["service_addresses"] = True
     print("Greeting Agent finished")
+
+def finish_service_agent(customer_id: str, args: Any):
+    customer_status["service_information"] = True
+    print("Service Agent finished")
 
 def validate_service_address(customer_id: str, args: Any):
     address_data = args["update_service_address"]
@@ -138,6 +142,24 @@ def check_service(customer_id: str, args: Any):
         "qualification_questions": []
     }
 
+def get_qualification_question(customer_id: str, args: Any):
+    for question in customer_info["service"]["qualification_questions"]:
+        if not question["answered"]:
+            return question
+    return {
+        "answered": None
+    }
+
+def save_qualification_answer(customer_id: str, args: Any):
+    question_text = args["qualification_question"]["question"]
+    answer_text = args["message"]
+
+    for question in customer_info["service"]["qualification_questions"]:
+        if question["question"] == question_text and not question["answered"]:
+            question["answered"] = True
+            question["answer"] = answer_text
+
+
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information":      get_contact_information,
     "get_service_addresses":        get_service_addresses,
@@ -148,5 +170,8 @@ API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "finish_greeting_agent":        finish_greeting_agent,
     "validate_service_address":     validate_service_address,
     "get_services":                 get_services,
-    "check_service":                check_service
+    "check_service":                check_service,
+    "get_qualification_question":   get_qualification_question,
+    "save_qualification_answer":    save_qualification_answer,
+    "finish_service_agent":         finish_service_agent
 }

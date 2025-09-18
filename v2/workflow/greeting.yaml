@@ -9,13 +9,14 @@ nodes:
         Output current conversation step as following json schema:
         ```json
         {
-          "intent": string // contact | addresses
+          "intent": string // greeting | contact | addresses
         }
         ```
 
         here:
-        contact: Confirm Contact Customer Information (in this case, current chat history is in contact information topic)
-        addresses: Confirm Service Addresses (in this case, current chat history is in service address topic)
+        greeting: Greeting message like (Hi, or Hello)
+        contact: Asking and answering or confirming contact information
+        addresses: Asking and answering or confirming service address
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), determien intent as "contact".
@@ -315,11 +316,11 @@ nodes:
     go_to:
       data: customer_status
       cases:
-        - name: greeting_contact
+        - name: greeting
           value: true
           to: greeting
           step: analyze_service_response
-        - name: greeting_contact
+        - name: greeting
           value: false
           to: greeting
           step: reback_to_contact
@@ -400,7 +401,7 @@ nodes:
         """
         or 
         """
-        We need to confirm service receiving address. Could you confirm exact address?
+        We need to confirm service receiving address. Could you confirm exact address in your service addresses list: $service_addresses?
         """
 
         Important: If address is already exist list, mention addresses.
@@ -552,7 +553,7 @@ nodes:
     go_to:
       data: customer_status
       cases:
-        - name: service
+        - name: service_information
           value: false
           to: service
           step: collect_services
