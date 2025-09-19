@@ -10,7 +10,7 @@ nodes:
           "intent": string,    // intent of current message (greeting | service_address | service_information | property | dispatch | other)
         }
         ```
-  
+
         The intent details are as following (Analyze chat history and determine):
         1. Greeting & Initial Customer Identification (intent: greeting | service_address)
           Detail:
@@ -43,8 +43,8 @@ nodes:
 
         Important:
         If customer send first help message (e.g. Hi, my AC stopped working.), classify intent as greeting.
-  
-        # Important:
+        And don't confuse between greeting and service_information intents. Contact information related topic is always greeting, and only service qualification questions and answers are service_information intent.
+
         Output only json code. Any plaintext or explanations are not allowed.
       return: intent_data
     go_to:
@@ -58,10 +58,10 @@ nodes:
           value: service_address
           to: greeting
           step: go_to_addresses
-        # - name: intent
-        #   value: service_information
-        #   to: service
-        #   step: init
+        - name: intent
+          value: service_information
+          to: service
+          step: collect_services
         - name: intent
           value: property
           to: property

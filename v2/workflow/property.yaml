@@ -28,7 +28,7 @@ nodes:
           value: true
           to: property
           step: finish_agent
-        - name: autherized
+        - name: authorized
           value: null
           to: property
           step: ask_authorized
