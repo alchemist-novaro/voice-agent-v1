@@ -16,3 +16,37 @@ nodes:
         finished: true
         to: intent
         step: init
+  collect_available_times:
+    type: callback
+    client:
+      data: get_available_times
+      args: []
+      return: available_times
+    go_to:
+      data:
+      cases: []
+      default:
+        to: dispatch
+        step: ask_available_time
+  ask_available_time:
+    type: process
+    client:
+      prompt: |
+        Base text:
+        """
+        These are the list of available times to schedule service:
+        $available_times
+
+        Please select your best time to receive service.
+        """
+        
+        Update base text more friendly, natively and reasonably.
+        
+        Output ONLY updated text (no explanations, no extra text, no code format).
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init

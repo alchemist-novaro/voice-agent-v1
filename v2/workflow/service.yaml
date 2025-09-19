@@ -1,5 +1,34 @@
 note: Service Information
 nodes:
+  # init:
+  #   type: analyze
+  #   client:
+  #     prompt: |
+  #       Customer message: $message
+  #       Analyze chat history and determine current intent is answer about qualification question or not.
+  #       And output this json format data:
+  #       ```json
+  #       {
+  #         "is_answer": boolean
+  #       }
+  #       ```
+
+  #       Output only json data. Any explanations or plaintext is not allowed.
+  #     return: intent_data
+  #   go_to:
+  #     data: intent_data
+  #     cases:
+  #       - name: is_answer
+  #         value: true
+  #         to: service
+  #         step: save_qualification_answer
+  #       - name: is_answer
+  #         value: false
+  #         to: service
+  #         step: collect_services
+  #     default:
+  #       to: service
+  #       step: save_qualification_answer
   init:
     type: callback
     client:
@@ -79,6 +108,9 @@ nodes:
           value: not_support
           to: service
           step: not_support_service
+      default:
+        to: service
+        step: loop_qualification_questions
   not_support_service:
     type: process
     client:
@@ -162,7 +194,7 @@ nodes:
       prompt: |
         Output thanks message about answering for qualification questions.
         And mention it will be helpful to determine your worries and fix them.
-        Only output thanks message.
+        Only output thanks message. Don't ask anything.
 
         Output ONLY assistant message. (no explanations, no extra text, no code format)
     go_to:
@@ -195,7 +227,7 @@ nodes:
         - name: dispatch
           value: false
           to: dispatch
-          step: init
+          step: collect_available_times
       default:
         to: extra
         step: handle_success 

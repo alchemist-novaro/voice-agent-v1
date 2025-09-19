@@ -564,7 +564,7 @@ nodes:
         - name: dispatch
           value: false
           to: dispatch
-          step: init
+          step: collect_available_times
       default:
         to: extra
         step: handle_success
