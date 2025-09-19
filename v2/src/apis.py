@@ -77,12 +77,16 @@ def get_customer_status(customer_id: str, args: Any):
     return customer_status
 
 def finish_greeting_agent(customer_id: str, args: Any):
-    customer_status["service_addresses"] = True
+    customer_status["service_address"] = True
     print("Greeting Agent finished")
 
 def finish_service_agent(customer_id: str, args: Any):
     customer_status["service_information"] = True
     print("Service Agent finished")
+
+def finish_property_agent(customer_id: str, args: Any):
+    customer_status["property"] = True
+    print("Property Agent finished")
 
 def validate_service_address(customer_id: str, args: Any):
     address_data = args["update_service_address"]
@@ -173,5 +177,6 @@ API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "check_service":                check_service,
     "get_qualification_question":   get_qualification_question,
     "save_qualification_answer":    save_qualification_answer,
-    "finish_service_agent":         finish_service_agent
+    "finish_service_agent":         finish_service_agent,
+    "finish_property_agent":        finish_property_agent
 }

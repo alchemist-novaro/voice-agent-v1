@@ -11,7 +11,7 @@ nodes:
         }
         ```
   
-        The intent details are as following:
+        The intent details are as following (Analyze chat history and determine):
         1. Greeting & Initial Customer Identification (intent: greeting | service_address)
           Detail:
           - First Message Greeting  (greeting)
@@ -27,8 +27,7 @@ nodes:
             - Ask about Dequalification 
         3. Property Information (intent: property)
           Detail:
-            Understand if the customer is the property owner and deduce the property type from the conversation.
-            - Check conversation history for property ownership indicators
+            Ask and answer qualify property autherized person related topic
         4. Availability & Dispatch Fee (intent: dispatch)
           Detail:
             Provide availability based on the customer's needs, along with the relevant dispatch fees.
