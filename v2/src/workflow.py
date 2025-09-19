@@ -33,18 +33,24 @@ class Workflow:
         self.args["next"]["finished"] = False
         self.args["message"] = message
         self.chat_history.append({"role": "user", "content": message})
-        while not self.args["next"]["finished"] \
-            and not self.args["next"]["to"] == "completed" \
-            and not self.args["next"]["to"] == "canceled":
-            agent = Agent(
-                f"./workflow/{self.args["next"]["to"]}.yaml",
-                self.args,
-                self.chat_history,
-                self.client
-            )
-            response = agent.process(self.args["next"]["step"])
-            async for chunk in response:
-                yield chunk
+        while True:
+            try:
+                if self.args["next"]["finished"] \
+                    or self.args["next"]["to"] == "completed" \
+                    or self.args["next"]["to"] == "canceled":
+                    break
+                agent = Agent(
+                    f"./workflow/{self.args["next"]["to"]}.yaml",
+                    self.args,
+                    self.chat_history,
+                    self.client
+                )
+                response = agent.process(self.args["next"]["step"])
+                async for chunk in response:
+                    yield chunk
+            except:
+                self.args["next"]["to"] = "extra"
+                self.args["next"]["step"] = "handle_error"
 
         if self.args["next"]["to"] == "completed":
             await self.disconnect()

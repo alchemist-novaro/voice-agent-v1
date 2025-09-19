@@ -1,3 +1,4 @@
+import time
 from livekit.agents import (
     AgentSession,
     Agent,
@@ -26,6 +27,7 @@ class Assistant(Agent):
 
 async def entrypoint(ctx: JobContext):
     async def disconnect():
+        time.sleep(10)
         await ctx.room.disconnect()
 
     session = AgentSession(

@@ -34,9 +34,8 @@ nodes:
           step: ask_authorized
         - name: authorized
           value: false
-          finished: true
-          to: canceled
-          step: -1
+          to: extra
+          step: handle_cancel
       default:
         to: property
         step: ask_authorized
@@ -83,7 +82,7 @@ nodes:
       cases: []
       default:
         to: property
-        step: go_to_other_agent
+        step: save_agent_finished_state
   save_agent_finished_state:
     type: callback
     client:
@@ -122,5 +121,5 @@ nodes:
           to: dispatch
           step: init
       default:
-        to: completed
-        step: -1
+        to: extra
+        step: handle_success

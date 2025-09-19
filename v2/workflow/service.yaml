@@ -99,9 +99,8 @@ nodes:
       data:
       cases: []
       default:
-        finished: true
-        to: canceled
-        step: -1
+        to: extra
+        step: handle_cancel
   loop_qualification_questions:
     type: callback
     client:
@@ -198,5 +197,5 @@ nodes:
           to: dispatch
           step: init
       default:
-        to: completed
-        step: -1      
+        to: extra
+        step: handle_success 

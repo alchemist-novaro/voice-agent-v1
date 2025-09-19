@@ -1,0 +1,47 @@
+note: Cancel, Error, Success handling
+nodes:
+  handle_success:
+    type: process
+    client:
+      prompt: |
+        Mention your happy about scheduling service.
+        Based on chat history please make appointment success message.
+
+        Output ONLY assistant message (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: completed
+        step: -1
+  handle_cancel:
+    type: process
+    client:
+      prompt: |
+        Mention about our regret and sadness about canceling or not satisfaction.
+        Based on chat history please make assistant message about this.
+
+        Output ONLY assistant message (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: canceled
+        step: -1
+  handle_error:
+    type: process
+    client:
+      prompt: |
+        Mention about your mistake and sorrying about occurr error in processing, and recommend retying
+        According to chat history, give me native and reasonable assistant message
+
+        Output ONLY assistant message (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init

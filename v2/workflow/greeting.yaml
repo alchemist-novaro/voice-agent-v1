@@ -483,8 +483,8 @@ nodes:
           step: ask_service_addresses
         - name: canceled
           value: true
-          to: canceled
-          step: -1
+          to: extra
+          step: handle_cancel
       default:
         to: greeting
         step: validate_service_addresses
@@ -566,5 +566,5 @@ nodes:
           to: dispatch
           step: init
       default:
-        to: completed
-        step: -1
+        to: extra
+        step: handle_success

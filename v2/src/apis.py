@@ -163,6 +163,12 @@ def save_qualification_answer(customer_id: str, args: Any):
             question["answered"] = True
             question["answer"] = answer_text
 
+def get_available_times(customer_id: str, args: Any):
+    return [
+        "Tuesday, 9 AM",
+        "Wednesday, 8 AM",
+        "Thursday, 9 AM"
+    ]
 
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information":      get_contact_information,
@@ -178,5 +184,6 @@ API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_qualification_question":   get_qualification_question,
     "save_qualification_answer":    save_qualification_answer,
     "finish_service_agent":         finish_service_agent,
-    "finish_property_agent":        finish_property_agent
+    "finish_property_agent":        finish_property_agent,
+    "get_available_times":          get_available_times
 }
