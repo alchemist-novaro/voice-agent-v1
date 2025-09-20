@@ -1,17 +1,44 @@
 note: Availability & Dispatch Fee
 nodes:
   init:
-    type: process
+    type: analyze
     client:
       prompt: |
-        Ask about Availability & Dispatch Fee
-        And If response say thank you message
-        Here dispatch fee is $75 mention it in confirmation message.
+        Analyze chat history and determine current message ( $message ) intent.
+        Output schema:
+        ```json
+        {
+          "intent": string // available_time | available_time_answer | urgent_problem | urgent_problem_answer | dispatch_fee | dispatch_fee_answer
+        }
+        ```
 
-        Output only assistant message (no explanations, no extra text, no code format)
+        Here,
+        - available_time: It's case of customer required available time list to assistant.
+        - available_time_answer: It's case of customer answered available time to assistant
+        - dispatch_fee: It's case of customer requested dispatch fee info.
+        - dispatch_fee_answer: It's case of customer answered and confirmed dispatch fee.
+
+        Output only json data. Any explanations, plaintext, and code format are not allowed.
+      return: intent_data
     go_to:
-      data: 
-      cases: []
+      data: intent_data
+      cases: 
+        - name: intent
+          value: available_time
+          to: dispatch
+          step: collect_available_times
+        - name: intent
+          value: available_time_answer
+          to: dispatch
+          step: analyze_available_time
+        - name: intent
+          value: dispatch_fee
+          to: dispatch
+          step: ask_dispatch_fee
+        - name: intent
+          value: dispatch_fee_answer
+          to: dispatch
+          step: analyze_dispatch_fee
       default:
         finished: true
         to: intent
@@ -19,7 +46,7 @@ nodes:
   collect_available_times:
     type: callback
     client:
-      data: get_available_times
+      name: get_available_times
       args: []
       return: available_times
     go_to:
@@ -38,6 +65,7 @@ nodes:
         $available_times
 
         Please select your best time to receive service.
+        If there is no time you want, and you need urgent help, please let me know with the time you want to receive service.
         """
         
         Update base text more friendly, natively and reasonably.
@@ -50,3 +78,132 @@ nodes:
         finished: true
         to: intent
         step: init
+  analyze_available_time:
+    type: analyze
+    client:
+      prompt: |
+        Analyze available time and output this json format data:
+        ```json
+        {
+          "available_time": string,
+          "is_urgent": boolean
+        }
+        ```
+
+        Here, the available time is not in following available time list, this time means urgent even customer didn't mentioned urgent situation.
+        $available_times
+
+        Output only json data. Any explanations or plaintext are not allowed.
+      return: available_time
+    go_to:
+      data:
+      cases: []
+      default:
+        to: dispatch
+        step: save_available_time
+  save_available_time:
+    type: callback
+    client:
+      name: save_available_time
+      args:
+        - available_time
+      return:
+    go_to:
+      data:
+      cases: []
+      default:
+        to: dispatch
+        step: ask_dispatch_fee
+  ask_dispatch_fee:
+    type: process
+    client:
+      prompt: |
+        Analyze chat history and according to it's urgent or not, ask dispatch fee.
+        If urgent, dispatch fee is $75, and if urgent case, additional fee $75 is needed.
+
+        Base text:
+        """
+        [to_fix_problem] The service fee is $75, and additional travel fee will be added for woerker.
+        Would you confirm about this dispatch fee?
+        """
+        or
+        """
+        [to_fix_urgent_problem] We can sure we can support help urgently, but the service fee is $75 and urgent help additional fee $75 will be applied.
+        And additional traveling fee for worker will be added.
+        Would you confirm this dispatch fee please?
+        """
+
+        According to chat history, update these base text natively and reasonably.
+
+        Output ONLY updated text. (no explanations, no extra text, no code format)
+    go_to:
+      data:
+      cases: []
+      default:
+        finished: true
+        to: intent
+        step: init
+  analyze_dispatch_fee:
+    type: analyze
+    client:
+      prompt: |
+        Analyze chat history and output following format json data
+        ```json
+        {
+          "dispatch_fee": int
+        }
+        ```
+
+        Based on chat history, determine urgent situation and determine dispatch fee
+        if urgent it's 150, and if not 75.
+        Here, customer mentioned available time is not in $available_times list, the situation is urgent if customer didn't mentioned urgent situation.
+
+        Output only JSON format data. Any explanations or plaintext are not allowed.
+      return: dispatch_fee
+    go_to:
+      data:
+      cases: []
+      default:
+        to: dispatch
+        step: save_dispatch_fee
+  save_dispatch_fee:
+    type: callback
+    client:
+      name: save_dispatch_fee
+      args: 
+        - dispatch_fee
+      return:
+    go_to:
+      data:
+      cases: []
+      default:
+        to: dispatch
+        step: go_to_other_agent
+  go_to_other_agent:
+    type: callback
+    client:
+      name: get_customer_status
+      args: []
+      return: customer_status
+    go_to:
+      data: customer_status
+      cases:
+        - name: greeting
+          value: false
+          to: greeting
+          step: fetch_contact_information
+        - name: service_address
+          value: false
+          to: greeting
+          step: go_to_addresses
+        - name: service_information
+          value: false
+          to: service
+          step: collect_services
+        - name: property
+          value: false
+          to: property
+          step: init
+      default:
+        to: extra
+        step: handle_success

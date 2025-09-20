@@ -14,7 +14,12 @@ customer_info = {
             "in_service_area": True,
             "serviceable": True
         }
-    ]
+    ],
+    "dispatch": {
+        "available_time": None,
+        "is_urgent": False,
+        "dispatch_fee": 0
+    }
 }
 customer_status = {
     "greeting": False,
@@ -170,6 +175,13 @@ def get_available_times(customer_id: str, args: Any):
         "Thursday, 9 AM"
     ]
 
+def save_available_time(customer_id: str, args: Any):
+    customer_info["dispatch"]["available_time"] = args["available_time"]["available_time"]
+    customer_info["dispatch"]["is_urgent"] = args["available_time"]["is_urgent"]
+
+def save_dispatch_fee(customer_id: str, args: Any):
+    customer_info["dispatch"]["dispatch_fee"] = args["dispatch_fee"]["dispatch_fee"]
+
 API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "get_contact_information":      get_contact_information,
     "get_service_addresses":        get_service_addresses,
@@ -185,5 +197,7 @@ API_FUNCTIONS: dict[str, Callable[[str, Any], Any]] = {
     "save_qualification_answer":    save_qualification_answer,
     "finish_service_agent":         finish_service_agent,
     "finish_property_agent":        finish_property_agent,
-    "get_available_times":          get_available_times
+    "get_available_times":          get_available_times,
+    "save_available_time":          save_available_time,
+    "save_dispatch_fee":            save_dispatch_fee
 }
